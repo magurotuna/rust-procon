@@ -124,7 +124,12 @@ impl<T: Ord> Ord for Rev<T> {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn resolve() {
-    unimplemented!();
+    // d1, d2, ..., dn をソートしてuniqをとった集合の要素数が答え
+    let n = read!(usize);
+    let mochies: Vec<usize> = read![usize; n];
+    let uniq: HashSet<usize> = mochies.into_iter().collect();
+    let count = uniq.iter().count();
+    println!("{}", count);
 }
 
 fn main() {
