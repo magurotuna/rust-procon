@@ -122,57 +122,41 @@ impl<T: Ord> Ord for Rev<T> {
 // 逆順ソートここまで
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-fn recurse(
-    cur_str: String,
-    target: &str,
-    target_vec: &Vec<char>,
-    d: &[&str; 2],
-    e: &[&str; 2],
-) -> bool {
-    if target == &cur_str {
-        return true;
-    }
-
-    let cur_len = cur_str.len();
-    if cur_len > target_vec.len() {
-        return false;
-    }
-
-    // target_vec の (cur_str.len() + 1) 文字目が d, e ではない場合は作れないのでfalseを返す
-    match target_vec.get(cur_len) {
-        Some(&c) => match c {
-            'd' => {
-                let mut s1 = cur_str.clone();
-                let mut s2 = cur_str.clone();
-                s1.push_str(d[0]);
-                s2.push_str(d[1]);
-
-                recurse(s1, target, target_vec, d, e) || recurse(s2, target, target_vec, d, e)
-            }
-            'e' => {
-                let mut s1 = cur_str.clone();
-                let mut s2 = cur_str.clone();
-                s1.push_str(e[0]);
-                s2.push_str(e[1]);
-
-                recurse(s1, target, target_vec, d, e) || recurse(s2, target, target_vec, d, e)
-            }
-            _ => return false,
-        },
-        None => return false,
-    }
-}
-
 fn resolve() {
     let s: String = read!(String);
-    let mut t = String::new();
-    let words_d = ["dream", "dreamer"];
-    let words_e = ["erase", "eraser"];
-    let s_chars = s.chars().vec();
+
+    // n-1文字目まで分割可能であればtrue そうでなければfalse
+    // とりあえずfalseで初期化
+    let mut dp: Vec<bool> = vec![false; 10usize.pow(5)];
+    // スタートだけtrueにしておく
+    dp[0] = true;
+
+    let words = ["dream", "dreamer", "erase", "eraser"];
     let s_len = s.len();
 
-    let result = recurse(t, &s, &s_chars, &words_d, &words_e);
-    println!("{}", if result { "YES" } else { "NO" });
+    for i in 0..s_len {
+        if !dp[i] {
+            continue;
+        }
+        for word in &words {
+            if s_len < i + word.len() {
+                continue;
+            }
+            if &s[i..(i + word.len())] == *word {
+                dp[i + word.len()] = true;
+            }
+            // v1.15.1 だと get が使えない……
+            //            match s.get(i..(i + word.len())) {
+            //                Some(part_s) => {
+            //                    if part_s == *word {
+            //                    }
+            //                }
+            //                None => (),
+            //            }
+        }
+    }
+
+    println!("{}", if dp[s_len] { "YES" } else { "NO" });
 }
 
 fn main() {
