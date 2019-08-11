@@ -1,8 +1,6 @@
 #![allow(unused_imports)]
 #![allow(non_snake_case)]
 #![allow(dead_code)]
-#![allow(unused_macros)]
-
 use std::cell::RefCell;
 use std::cmp::{max, min, Ordering};
 use std::collections::*;
@@ -13,6 +11,7 @@ use std::ops::*;
 use std::rc::Rc;
 use std::usize;
 
+#[allow(unused_macros)]
 macro_rules! read {
     ([$t:ty] ; $n:expr) =>
         ((0..$n).map(|_| read!([$t])).collect::<Vec<_>>());
