@@ -123,7 +123,22 @@ impl<T: Ord> Ord for Rev<T> {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn resolve() {
-    unimplemented!();
+    let n = read!(usize);
+    let v = read![i64, i64, i64; n];
+
+    let mut cur_point: (i64, i64, i64) = (0, 0, 0);
+    for i in 0usize..n {
+        let movement = (v[i].1 - cur_point.1).abs() + (v[i].2 - cur_point.2).abs();
+        let time_diff = v[i].0 - cur_point.0;
+        if (movement <= time_diff) && (movement % 2 == time_diff % 2) {
+            cur_point = v[i];
+            continue;
+        } else {
+            println!("No");
+            return;
+        }
+    }
+    println!("Yes");
 }
 
 fn main() {
