@@ -124,7 +124,17 @@ impl<T: Ord> Ord for Rev<T> {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn resolve() {
-    unimplemented!();
+    let n = read!(usize);
+    let mut cards: Vec<usize> = read!([usize]);
+
+    // 得点が大きい順にソート
+    cards.sort_by_key(|&x| Rev(x));
+
+    let a_point = cards.iter().stepby(2).fold(0, |sum, &i| sum + i);
+    let b_point = cards.iter().skip(1).stepby(2).fold(0, |sum, &i| sum + i);
+
+    //    println!("{}, {}", a_point, b_point);
+    println!("{}", a_point - b_point);
 }
 
 fn main() {
