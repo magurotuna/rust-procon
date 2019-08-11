@@ -122,8 +122,57 @@ impl<T: Ord> Ord for Rev<T> {
 // 逆順ソートここまで
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+fn recurse(
+    cur_str: String,
+    target: &str,
+    target_vec: &Vec<char>,
+    d: &[&str; 2],
+    e: &[&str; 2],
+) -> bool {
+    if target == &cur_str {
+        return true;
+    }
+
+    let cur_len = cur_str.len();
+    if cur_len > target_vec.len() {
+        return false;
+    }
+
+    // target_vec の (cur_str.len() + 1) 文字目が d, e ではない場合は作れないのでfalseを返す
+    match target_vec.get(cur_len) {
+        Some(&c) => match c {
+            'd' => {
+                let mut s1 = cur_str.clone();
+                let mut s2 = cur_str.clone();
+                s1.push_str(d[0]);
+                s2.push_str(d[1]);
+
+                recurse(s1, target, target_vec, d, e) || recurse(s2, target, target_vec, d, e)
+            }
+            'e' => {
+                let mut s1 = cur_str.clone();
+                let mut s2 = cur_str.clone();
+                s1.push_str(e[0]);
+                s2.push_str(e[1]);
+
+                recurse(s1, target, target_vec, d, e) || recurse(s2, target, target_vec, d, e)
+            }
+            _ => return false,
+        },
+        None => return false,
+    }
+}
+
 fn resolve() {
-    unimplemented!();
+    let s: String = read!(String);
+    let mut t = String::new();
+    let words_d = ["dream", "dreamer"];
+    let words_e = ["erase", "eraser"];
+    let s_chars = s.chars().vec();
+    let s_len = s.len();
+
+    let result = recurse(t, &s, &s_chars, &words_d, &words_e);
+    println!("{}", if result { "YES" } else { "NO" });
 }
 
 fn main() {
