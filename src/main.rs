@@ -1,6 +1,7 @@
 #![allow(unused_imports)]
 #![allow(non_snake_case)]
-
+#![allow(dead_code)]
+#[allow(unused_macros)]
 use std::cell::RefCell;
 use std::cmp::{max, min, Ordering};
 use std::collections::*;
@@ -10,7 +11,6 @@ use std::mem::{replace, swap};
 use std::ops::*;
 use std::rc::Rc;
 
-#[allow(unused_macros)]
 macro_rules! read {
     ([$t:ty] ; $n:expr) =>
         ((0..$n).map(|_| read!([$t])).collect::<Vec<_>>());
@@ -27,7 +27,6 @@ macro_rules! read {
     }};
 }
 
-#[allow(dead_code)]
 fn rl() -> String {
     let mut buf = String::new();
     stdin().read_line(&mut buf).unwrap();
