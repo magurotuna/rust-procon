@@ -41,6 +41,10 @@ trait IteratorExt: Iterator + Sized {
 
 impl<T: Iterator> IteratorExt for T {}
 
+fn resolve() {
+    unimplemented!();
+}
+
 fn main() {
-    println!("Hello, world!");
+    resolve();
 }
