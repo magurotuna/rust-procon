@@ -11,6 +11,7 @@ use std::ops::*;
 use std::rc::Rc;
 use std::usize;
 
+/// FYI: https://github.com/vain0x/scan-bench
 #[allow(unused_macros)]
 macro_rules! read {
     ([$t:ty] ; $n:expr) =>
