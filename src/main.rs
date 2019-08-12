@@ -124,5 +124,42 @@ impl<T: Ord> Ord for Rev<T> {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let s: String = read!(String);
+    let s_len = s.len();
+
+    let mut whole_sum = 0;
+
+    for i in 0..1 << (s_len - 1) {
+        let mut v = vec![false; s_len - 1];
+        for j in 0..(s_len - 1) {
+            // iのj番目ビットが立っているか
+            if (1 << j) & i != 0 {
+                v[j] = true;
+            }
+        }
+
+        //        println!("{:?}", &v);
+
+        let mut sum = 0;
+        let mut used_count = 0; // すでにプラスによって分割され消費された文字の位置
+        for k in 0..v.len() {
+            if !v[k] {
+                continue;
+            }
+            // + を入れる
+            // used_count 〜 k までの数字charを1つの数字とみなして足す
+            let d: usize = s[used_count..(k + 1)].parse().unwrap();
+            sum += d;
+            // used_count を更新
+            used_count = k + 1;
+        }
+        // 最後にused_count から sの末尾 までの数字を足す
+        let last: usize = s[used_count..s_len].parse().unwrap();
+        sum += last;
+        //        println!("{}", &sum);
+
+        whole_sum += sum;
+    }
+
+    println!("{}", whole_sum);
 }
