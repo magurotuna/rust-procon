@@ -124,5 +124,25 @@ impl<T: Ord> Ord for Rev<T> {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let n: String = read!(String);
+    let n2: usize = n.parse().unwrap();
+    let digits: usize = n.chars().count();
+
+    // 一桁のときは少し特殊（0を数えないため）なので場合分け
+    if digits == 1 {
+        println!("{}", &n);
+        return;
+    }
+
+    let mut count: usize = 0;
+    for i in 1..(digits + 1) {
+        if i == 1 {
+            count += 9;
+        } else if i == digits && i % 2 != 0 {
+            count += n2 - 10_usize.pow(digits as u32 - 1) + 1;
+        } else if i % 2 != 0 {
+            count += 10_usize.pow(i as u32) - 10_usize.pow(i as u32 - 1);
+        }
+    }
+    println!("{}", &count);
 }
