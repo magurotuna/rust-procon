@@ -123,6 +123,99 @@ impl<T: Ord> Ord for Rev<T> {
 // 逆順ソートここまで
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+fn no_land(p: &Vec<Vec<bool>>) -> bool {
+    p.iter().all(|r| r.iter().all(|&c| !c))
+}
+
+fn dfs(p: &mut Vec<Vec<bool>>, a: usize, b: usize) {
+    //    println!("{} {}", &a, &b);
+    // 海に変える
+    p[a][b] = false;
+    // 上下左右を見て、陸地だったら再帰する
+    let up_a = min(9, a + 1);
+    let down_a = if a > 0 { a - 1 } else { 0 };
+    let right_b = min(9, b + 1);
+    let left_b = if b > 0 { b - 1 } else { 0 };
+
+    //    println!("{} {} {} {}", up_a, down_a, right_b, left_b);
+
+    // 上
+    if p[up_a][b] {
+        dfs(p, up_a, b);
+    }
+    // 下
+    if p[down_a][b] {
+        dfs(p, down_a, b);
+    }
+    // 左
+    if p[a][left_b] {
+        dfs(p, a, left_b);
+    }
+    // 右
+    if p[a][right_b] {
+        dfs(p, a, right_b);
+    }
+}
+
+fn print(p: &Vec<Vec<bool>>) {
+    for i in 0..10 {
+        let v = &p[i];
+        println!(
+            "{:?}",
+            v.iter()
+                .map(|&b| if b { 'o' } else { 'x' })
+                .collect::<Vec<char>>()
+        );
+    }
+    println!("----------------------------");
+}
+
 fn main() {
-    unimplemented!();
+    let input: Vec<String> = read![String; 10];
+    let orig_p: Vec<Vec<bool>> = input
+        .into_iter()
+        .map(|r| {
+            r.chars()
+                .map(|c| if c == 'o' { true } else { false })
+                .collect::<Vec<bool>>()
+        })
+        .collect();
+
+    let mut ans = "NO";
+
+    'first: for x in 0..10 {
+        'second: for y in 0..10 {
+            let mut p = orig_p.clone();
+            // 注目してる座標が海だったら塗る
+            if !p[x][y] {
+                p[x][y] = true;
+            }
+            //            if x == 5 && y == 4 {
+            //                print(&p);
+            //            }
+
+            // ある1つの陸地から深さ優先で探索していき、海に変えていく
+            for a in 0..10 {
+                for b in 0..10 {
+                    if p[a][b] {
+                        dfs(&mut p, a, b);
+                        //                        if x == 5 && y == 4 {
+                        //                            print(&p);
+                        //                        }
+                        // 全部が海になっているかを判定
+                        // 海になっていたら 'YES' として全ループを抜ける
+                        if no_land(&p) {
+                            ans = "YES";
+                            break 'first;
+                        } else {
+                            // この場合の(x, y)では島を連結することができなかったということなので、次の(x, y)を試す段階に進む
+                            continue 'second;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    println!("{}", &ans);
 }
