@@ -124,5 +124,17 @@ impl<T: Ord> Ord for Rev<T> {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let mut t = String::from("iambob");
+    println!(
+        "{:?}",
+        t.chars().collect::<Vec<char>>().sort_by(|a, b| b.cmp(a))
+    );
+    let n: usize = read!(usize);
+    let input: Vec<String> = read![String; n];
+    let v: Vec<Vec<char>> = input
+        .into_iter()
+        .map(|s| s.chars().collect::<Vec<char>>())
+        .collect();
+
+    println!("{:?}", &v);
 }
