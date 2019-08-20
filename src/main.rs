@@ -143,5 +143,61 @@ fn pow(x: u64, n: u64, modulo: u64) -> u64 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let mut a: Vec<usize> = read!([usize]);
+
+    a.sort();
+
+    let mut iter = a.iter();
+
+    if n % 2 == 0 {
+        let mut start = 1;
+        while let Some(&val1) = iter.next() {
+            match iter.next() {
+                Some(&val2) => {
+                    if start == val1 && start == val2 {
+                        start += 2;
+                    } else {
+                        println!("0");
+                        return;
+                    }
+                }
+                None => {
+                    println!("0");
+                    return;
+                }
+            }
+        }
+    } else {
+        match iter.next() {
+            Some(&val) => {
+                if val != 0 {
+                    println!("0");
+                    return;
+                }
+            }
+            None => {
+                println!("0");
+                return;
+            }
+        }
+        let mut start = 2;
+        while let Some(&val1) = iter.next() {
+            match iter.next() {
+                Some(&val2) => {
+                    if start == val1 && start == val2 {
+                        start += 2;
+                    } else {
+                        println!("0");
+                        return;
+                    }
+                }
+                None => {
+                    println!("0");
+                    return;
+                }
+            }
+        }
+    }
+    println!("{}", pow(2u64, (n / 2) as u64, MOD_10_9_7));
 }
