@@ -11,6 +11,8 @@ use std::ops::*;
 use std::rc::Rc;
 use std::usize;
 
+const MOD_10_9_7: u64 = 1_000_000_007;
+
 /// FYI: https://github.com/vain0x/scan-bench
 #[allow(unused_macros)]
 macro_rules! read {
@@ -121,6 +123,23 @@ impl<T: Ord> Ord for Rev<T> {
     }
 }
 // 逆順ソートここまで
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// べき乗のmodを効率的に求める関数
+/// ref: https://algorithmbeginner.blogspot.com/2018/02/blog-post_23.html
+fn pow(x: u64, n: u64, modulo: u64) -> u64 {
+    let mut res = 1;
+    if n > 0 {
+        res = pow(x, n / 2, modulo);
+        if n % 2 == 0 {
+            res = (res * res) % modulo;
+        } else {
+            res = (((res * res) % modulo) * x) % modulo;
+        }
+    }
+    res
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
