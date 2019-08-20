@@ -125,46 +125,15 @@ impl<T: Ord> Ord for Rev<T> {
 
 fn main() {
     let n = read!(usize);
-    let input: Vec<(usize, usize)> = read![usize, usize; n];
+    let input: Vec<(u64, u64)> = read![u64, u64; n];
 
     let mut e = (1, 1);
 
-    for (i, &row) in input.iter().enumerate() {
-        if i == 0 {
-            e = (row.0, row.1);
-            continue;
-        }
-
-        let max_e = max(e.0, e.1);
-        let arr: Vec<usize> = (1..(max_e + 1)).collect();
-
-        //        println!("e: {:?}", &e);
-        //        println!("arr: {:?}", &arr);
-        //        println!("row: {:?}", &row);
-
-        let index = arr.binary_search_by(|&num| {
-            //            println!("num: {}", &num);
-            if row.0 * num < e.0 || row.1 * num < e.1 {
-                //                println!("Less!");
-                Ordering::Less
-            } else if row.0 * num >= e.0
-                && row.1 * num >= e.1
-                && (row.0 * (num - 1) < e.0 || row.1 * (num - 1) < e.1)
-            {
-                //                println!("Equal!");
-                Ordering::Equal
-            } else {
-                //                println!("Greater!");
-                Ordering::Greater
-            }
-        });
-
-        match index {
-            Ok(i) => {
-                e = (row.0 * arr[i], row.1 * arr[i]);
-            }
-            Err(i) => println!("error: {}", i),
-        };
+    for row in input {
+        let a = (e.0 as f64 / row.0 as f64).ceil() as u64;
+        let b = (e.1 as f64 / row.1 as f64).ceil() as u64;
+        let times = if a > b { a } else { b };
+        e = (row.0 * times, row.1 * times);
     }
 
     println!("{}", e.0 + e.1);
