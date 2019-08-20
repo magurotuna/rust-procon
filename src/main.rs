@@ -130,8 +130,8 @@ fn main() {
     let mut e = (1, 1);
 
     for row in input {
-        let a = (e.0 as f64 / row.0 as f64).ceil() as u64;
-        let b = (e.1 as f64 / row.1 as f64).ceil() as u64;
+        let a = (e.0 + row.0 - 1) / row.0;
+        let b = (e.1 + row.1 - 1) / row.1;
         let times = if a > b { a } else { b };
         e = (row.0 * times, row.1 * times);
     }
