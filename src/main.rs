@@ -143,5 +143,29 @@ fn pow(x: u64, n: u64, modulo: u64) -> u64 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let mut input: Vec<(i64, i64, i64)> = read![i64, i64, i64; n];
+
+    // input[0] の h が1より大きいものになるように調整
+    // これがないといくつかのテストケースで失敗する！！！
+    for i in 1..n {
+        if input[i].2 > 0 {
+            input.swap(0, i);
+            break;
+        }
+    }
+
+    for cx in 0..101 {
+        for cy in 0..101 {
+            let (x1, y1, h1) = input[0];
+            let H = h1 + (x1 - cx).abs() + (y1 - cy).abs();
+            if input
+                .iter()
+                .all(|&(x, y, h)| h == max(0, H - (x - cx).abs() - (y - cy).abs()))
+            {
+                println!("{} {} {}", &cx, &cy, &H);
+                return;
+            }
+        }
+    }
 }
