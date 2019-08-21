@@ -143,5 +143,49 @@ fn pow(x: u64, n: u64, modulo: u64) -> u64 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let (sx, sy, tx, ty) = read!(i64, i64, i64, i64);
+    let mut s = String::with_capacity(3000);
+
+    // 開始点をS、経由点をTとする
+    // path1: S->Sの右->Tの下->T
+    s.push_str("R");
+    for i in (sx + 1)..tx {
+        s.push_str("R");
+    }
+    for i in sy..(ty - 1) {
+        s.push_str("U");
+    }
+    s.push_str("U");
+
+    // path2: T->Tの左->Sの上->S
+    s.push_str("L");
+    for i in sx..(tx - 1) {
+        s.push_str("L");
+    }
+    for i in (sy + 1)..ty {
+        s.push_str("D");
+    }
+    s.push_str("D");
+
+    // path3: S->Sの下->Tの右->T
+    s.push_str("D");
+    for i in sx..(tx + 1) {
+        s.push_str("R");
+    }
+    for i in (sy - 1)..ty {
+        s.push_str("U");
+    }
+    s.push_str("L");
+
+    // path4: T->Tの上->Sの左->S
+    s.push_str("U");
+    for i in (sx - 1)..tx {
+        s.push_str("L");
+    }
+    for i in sy..(ty + 1) {
+        s.push_str("D");
+    }
+    s.push_str("R");
+
+    println!("{}", &s);
 }
