@@ -143,5 +143,22 @@ fn pow(x: u64, n: u64, modulo: u64) -> u64 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let a: Vec<usize> = read![[usize]];
+
+    // 数字 > その数字の出現回数 の場合、その数字は全部削除するしかない
+    // 数字 < その数字の出現回数 の場合、(回数 - 数字) 個だけ削除すればOK
+    // イコールの場合は当然そのままでOK
+
+    let mut h = HashMap::new();
+    for i in 0..n {
+        *h.entry(a[i]).or_insert(0usize) += 1;
+    }
+
+    let mut count = 0usize;
+    for (&k, &v) in &h {
+        count += if k > v { v } else { v - k };
+    }
+
+    println!("{}", &count);
 }
