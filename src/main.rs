@@ -143,5 +143,18 @@ fn pow(x: u64, n: u64, modulo: u64) -> u64 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let mut ans = 0;
+    for i in (1..(n + 1)).stepby(2) {
+        let mut count = 0;
+        for j in 1..(i + 1) {
+            if i % j == 0 {
+                count += 1;
+            }
+        }
+        if count == 8 {
+            ans += 1;
+        }
+    }
+    println!("{}", &ans);
 }
