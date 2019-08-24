@@ -142,41 +142,46 @@ fn pow(x: u64, n: u64, modulo: u64) -> u64 {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#[derive(Debug)]
-enum ABC {
-    A,
-    B,
-    C,
-    None,
-}
-
-fn abc(i: usize, j: usize, n: usize) -> ABC {
-    let a = 01 << 2 * (n - j);
-    let b = 10 << 2 * (n - j);
-    let c = 11 << 2 * (n - j);
-    if a & i == a {
-        ABC::A
-    } else if b & i == b {
-        ABC::B
-    } else if c & i == c {
-        ABC::C
-    } else {
-        ABC::None
+fn dfs(
+    depth: usize,
+    max_depth: usize,
+    mp: usize,
+    a: usize,
+    b: usize,
+    c: usize,
+    l: &Vec<usize>,
+    A: &usize,
+    B: &usize,
+    C: &usize,
+) -> i64 {
+    if depth == max_depth {
+        if a > 0 && b > 0 && c > 0 {
+            return (a as i64 - *A as i64).abs()
+                + (b as i64 - *B as i64).abs()
+                + (c as i64 - *C as i64).abs()
+                - 30
+                + mp as i64;
+        } else {
+            return 10_i64.pow(9);
+        }
     }
+
+    let len_a = a + l[depth];
+    let len_b = b + l[depth];
+    let len_c = c + l[depth];
+
+    let mp_a = dfs(depth + 1, max_depth, mp + 10, len_a, b, c, l, A, B, C);
+    let mp_b = dfs(depth + 1, max_depth, mp + 10, a, len_b, c, l, A, B, C);
+    let mp_c = dfs(depth + 1, max_depth, mp + 10, a, b, len_c, l, A, B, C);
+    let mp_none = dfs(depth + 1, max_depth, mp, a, b, c, l, A, B, C);
+
+    min(mp_a, min(mp_b, min(mp_c, mp_none)))
 }
 
 fn main() {
     let (n, a, b, c) = read!(usize, usize, usize, usize);
     let l: Vec<usize> = read![usize; n];
 
-    //    println!("{:?}", &l);
-
-    for i in 0..(4_usize.pow(n as u32)) {
-        let x: Vec<ABC> = l
-            .iter()
-            .enumerate()
-            .map(|(index, _)| abc(i, index + 1, n))
-            .collect();
-        println!("{:?}", &x);
-    }
+    let mp = dfs(0, n, 0, 0, 0, 0, &l, &a, &b, &c);
+    println!("{}", mp);
 }
