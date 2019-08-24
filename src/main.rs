@@ -159,23 +159,13 @@ fn main() {
         end: v[0].1,
     };
     for i in 1..m {
-        // 今の区間がすべて次の区間に包含される場合
-        if v[i].0 <= r.start && r.end <= v[i].1 {
-            continue;
-        }
-        // 次の区間によって今の区間の一部が切り取られる場合
-        if r.start <= v[i].0 && r.end <= v[i].1 && v[i].0 <= r.end {
-            r.start = v[i].0;
-            continue;
-        }
-        if v[i].0 <= r.start && v[i].1 <= r.end && r.start <= v[i].1 {
-            r.end = v[i].1;
-            continue;
-        }
-        // 共通部分がない場合
-        println!("0");
-        return;
+        r.start = max(r.start, v[i].0);
+        r.end = min(r.end, v[i].1);
     }
 
-    println!("{}", r.end - r.start + 1);
+    if r.start <= r.end {
+        println!("{}", r.end - r.start + 1);
+    } else {
+        println!("0");
+    }
 }
