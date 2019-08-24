@@ -166,30 +166,28 @@ fn main() {
     }
 
     let mut v_odd: Vec<(usize, usize)> = h_odd.iter().map(|(&key, &value)| (key, value)).collect();
-    v_odd.sort_by_key(|&(a, b)| Rev(b));
+    v_odd.sort_by_key(|&(_a, b)| Rev(b));
 
     let mut v_even: Vec<(usize, usize)> =
         h_even.iter().map(|(&key, &value)| (key, value)).collect();
-    v_even.sort_by_key(|&(a, b)| Rev(b));
+    v_even.sort_by_key(|&(_a, b)| Rev(b));
 
     let (odd_max_digit, odd_max_count) = v_odd[0];
     let (even_max_digit, even_max_count) = v_even[0];
 
-    let mut odd_change_count = (half_n - odd_max_count as i64).abs();
-    let mut even_change_count = (half_n - even_max_count as i64).abs();
+    let odd_change_count = (half_n - odd_max_count as i64).abs();
+    let even_change_count = (half_n - even_max_count as i64).abs();
 
     if odd_max_digit != even_max_digit {
         println!("{}", odd_change_count + even_change_count);
         return;
     } else {
-        if odd_change_count < even_change_count {
-            even_change_count = (half_n - v_even[1].1 as i64).abs();
-            println!("{}", odd_change_count + even_change_count);
-            return;
-        } else {
-            odd_change_count = (half_n - v_odd[1].1 as i64).abs();
-            println!("{}", odd_change_count + even_change_count);
-            return;
-        }
+        // 一番出現回数が多い文字がoddとevenで同じ場合、
+        // (1) oddの2番目に出現回数が多い文字への書き換え + even_change_count
+        // (2) evenの2番めに出現回数が多い文字への書き換え + odd_change_count
+        // の両方を試してみて、書き換え回数が小さい方が答えとなる
+        let count1 = (half_n - v_odd[1].1 as i64).abs() + even_change_count;
+        let count2 = (half_n - v_even[1].1 as i64).abs() + odd_change_count;
+        println!("{}", min(count1, count2));
     }
 }
