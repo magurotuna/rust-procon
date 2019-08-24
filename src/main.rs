@@ -143,7 +143,7 @@ fn pow(x: u64, n: u64, modulo: u64) -> u64 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    let (n, m) = read!(usize, usize);
+    let (_n, m) = read!(usize, usize);
     let v: Vec<(usize, usize)> = read!(usize, usize; m);
 
     #[derive(Clone, Copy, Debug)]
@@ -164,11 +164,11 @@ fn main() {
             continue;
         }
         // 次の区間によって今の区間の一部が切り取られる場合
-        if r.start <= v[i].0 && r.end <= v[i].1 {
+        if r.start <= v[i].0 && r.end <= v[i].1 && v[i].0 <= r.end {
             r.start = v[i].0;
             continue;
         }
-        if v[i].0 <= r.start && v[i].1 <= r.end {
+        if v[i].0 <= r.start && v[i].1 <= r.end && r.start <= v[i].1 {
             r.end = v[i].1;
             continue;
         }
