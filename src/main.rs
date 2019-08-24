@@ -142,6 +142,41 @@ fn pow(x: u64, n: u64, modulo: u64) -> u64 {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#[derive(Debug)]
+enum ABC {
+    A,
+    B,
+    C,
+    None,
+}
+
+fn abc(i: usize, j: usize, n: usize) -> ABC {
+    let a = 01 << 2 * (n - j);
+    let b = 10 << 2 * (n - j);
+    let c = 11 << 2 * (n - j);
+    if a & i == a {
+        ABC::A
+    } else if b & i == b {
+        ABC::B
+    } else if c & i == c {
+        ABC::C
+    } else {
+        ABC::None
+    }
+}
+
 fn main() {
-    unimplemented!();
+    let (n, a, b, c) = read!(usize, usize, usize, usize);
+    let l: Vec<usize> = read![usize; n];
+
+    //    println!("{:?}", &l);
+
+    for i in 0..(4_usize.pow(n as u32)) {
+        let x: Vec<ABC> = l
+            .iter()
+            .enumerate()
+            .map(|(index, _)| abc(i, index + 1, n))
+            .collect();
+        println!("{:?}", &x);
+    }
 }
