@@ -1,6 +1,7 @@
 #![allow(unused_imports)]
 #![allow(non_snake_case)]
 #![allow(dead_code)]
+
 use std::cell::RefCell;
 use std::cmp::{max, min, Ordering};
 use std::collections::*;
@@ -45,6 +46,7 @@ pub struct StepBy<I> {
     step: usize,
     first_take: bool,
 }
+
 impl<I> StepBy<I> {
     pub fn new(iter: I, step: usize) -> StepBy<I> {
         StepBy {
@@ -54,6 +56,7 @@ impl<I> StepBy<I> {
         }
     }
 }
+
 impl<I> Iterator for StepBy<I>
 where
     I: Iterator,
@@ -86,6 +89,7 @@ where
         }
     }
 }
+
 impl<I> ExactSizeIterator for StepBy<I> where I: ExactSizeIterator {}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -143,5 +147,53 @@ fn pow(x: u64, n: u64, modulo: u64) -> u64 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let input: (i64, i64) = read!(i64, i64);
+    let (a, b) = input;
+
+    #[derive(Clone, Copy)]
+    struct Node {
+        value: i64,
+        depth: usize,
+    };
+
+    let mut q: VecDeque<Node> = VecDeque::new();
+    q.push_front(Node { value: a, depth: 0 });
+
+    while !q.is_empty() {
+        match q.iter().find(|&&n| n.value == b) {
+            Some(&n) => {
+                println!("{}", n.depth);
+                return;
+            }
+            None => (),
+        };
+
+        let elem = q.pop_back().unwrap();
+
+        // 6種類の動作をおこなった結果を入れる
+        q.push_front(Node {
+            value: elem.value + 1,
+            depth: elem.depth + 1,
+        });
+        q.push_front(Node {
+            value: elem.value - 1,
+            depth: elem.depth + 1,
+        });
+        q.push_front(Node {
+            value: elem.value + 5,
+            depth: elem.depth + 1,
+        });
+        q.push_front(Node {
+            value: elem.value - 5,
+            depth: elem.depth + 1,
+        });
+        q.push_front(Node {
+            value: elem.value + 10,
+            depth: elem.depth + 1,
+        });
+        q.push_front(Node {
+            value: elem.value - 10,
+            depth: elem.depth + 1,
+        });
+    }
 }
