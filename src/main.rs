@@ -143,5 +143,36 @@ fn pow(x: u64, n: u64, modulo: u64) -> u64 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let mut a: Vec<usize> = read![[usize]];
+
+    while a.len() > 1 {
+        let mut m = 10i64.pow(10) as usize;
+        for i in &a {
+            if *i < m {
+                m = *i;
+            }
+        }
+        let mut min_flag = false; // 最小値 m を1つだけ含むように管理するフラグ
+        a = a
+            .iter()
+            .filter_map(|&u| {
+                if u > m {
+                    if u % m == 0 {
+                        None
+                    } else {
+                        Some(u % m)
+                    }
+                } else {
+                    if !min_flag {
+                        min_flag = true;
+                        Some(m)
+                    } else {
+                        None
+                    }
+                }
+            })
+            .collect();
+    }
+    println!("{}", &a[0]);
 }
