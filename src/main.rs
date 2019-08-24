@@ -154,5 +154,49 @@ fn gcd(x: i64, y: i64) -> i64 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let s: Vec<String> = read![String; n];
+    let st: Vec<Vec<char>> = s.iter().map(|x| x.chars().collect()).collect();
+
+    let mut h = HashMap::new();
+    let mut h2 = HashMap::new();
+
+    let v = vec![
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+        's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    ];
+    for a in &v {
+        h.insert(*a, 1000000000usize);
+        h2.insert(*a, 0usize);
+    }
+
+    for chars in st {
+        let mut h_tmp = h2.clone();
+        for c in chars {
+            let cur_count;
+            {
+                cur_count = *h_tmp.get(&c).unwrap();
+            }
+            h_tmp.insert(c, cur_count + 1);
+        }
+
+        for a in &v {
+            if h.get(a).unwrap() > h_tmp.get(a).unwrap() {
+                h.insert(*a, *h_tmp.get(a).unwrap());
+            }
+        }
+    }
+
+    let mut ans = String::new();
+
+    for a in &v {
+        let count = *h.get(a).unwrap();
+        if count > 0 {
+            for _ in 0..count {
+                ans.push(*a);
+            }
+        }
+    }
+
+    println!("{}", &ans);
 }
