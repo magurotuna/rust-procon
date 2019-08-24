@@ -143,5 +143,39 @@ fn pow(x: u64, n: u64, modulo: u64) -> u64 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let (n, m) = read!(usize, usize);
+    let v: Vec<(usize, usize)> = read!(usize, usize; m);
+
+    #[derive(Clone, Copy, Debug)]
+    struct Range {
+        start: usize,
+        end: usize,
+    };
+
+    // vの要素のうち1つを e とすると [e.0, e.1] の区間内の整数であればゲートを通過できる
+    // [e.0, e.1] の区間の共通集合を求め、その集合に属する整数の個数が答えである
+    let mut r = Range {
+        start: v[0].0,
+        end: v[0].1,
+    };
+    for i in 1..m {
+        // 今の区間がすべて次の区間に包含される場合
+        if v[i].0 <= r.start && r.end <= v[i].1 {
+            continue;
+        }
+        // 次の区間によって今の区間の一部が切り取られる場合
+        if r.start <= v[i].0 && r.end <= v[i].1 {
+            r.start = v[i].0;
+            continue;
+        }
+        if v[i].0 <= r.start && v[i].1 <= r.end {
+            r.end = v[i].1;
+            continue;
+        }
+        // 共通部分がない場合
+        println!("0");
+        return;
+    }
+
+    println!("{}", r.end - r.start + 1);
 }
