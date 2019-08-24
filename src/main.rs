@@ -108,7 +108,7 @@ impl<T: Iterator> IteratorExt for T {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// 逆順ソート ReverseがRust v1.19以降でしか使えないため独自実装
-#[derive(Eq, PartialEq, Clone, Debug)]
+#[derive(Eq, PartialEq, Clone, Copy, Debug)]
 pub struct Rev<T>(pub T);
 
 impl<T: PartialOrd> PartialOrd for Rev<T> {
@@ -143,5 +143,53 @@ fn pow(x: u64, n: u64, modulo: u64) -> u64 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let n: i64 = read!(i64);
+    let v: Vec<usize> = read![[usize]];
+
+    let half_n = n / 2;
+
+    // 1種類の数からなる数列の場合
+    if v.iter().collect::<HashSet<&usize>>().len() == 1 {
+        println!("{}", &half_n);
+        return;
+    }
+
+    let mut h_odd = HashMap::new();
+    let mut h_even = HashMap::new();
+
+    for i in 0..v.len() {
+        if i % 2 == 0 {
+            *h_even.entry(v[i]).or_insert(0) += 1;
+        } else {
+            *h_odd.entry(v[i]).or_insert(0) += 1;
+        }
+    }
+
+    let mut v_odd: Vec<(usize, usize)> = h_odd.iter().map(|(&key, &value)| (key, value)).collect();
+    v_odd.sort_by_key(|&(a, b)| Rev(b));
+
+    let mut v_even: Vec<(usize, usize)> =
+        h_even.iter().map(|(&key, &value)| (key, value)).collect();
+    v_even.sort_by_key(|&(a, b)| Rev(b));
+
+    let (odd_max_digit, odd_max_count) = v_odd[0];
+    let (even_max_digit, even_max_count) = v_even[0];
+
+    let mut odd_change_count = (half_n - odd_max_count as i64).abs();
+    let mut even_change_count = (half_n - even_max_count as i64).abs();
+
+    if odd_max_digit != even_max_digit {
+        println!("{}", odd_change_count + even_change_count);
+        return;
+    } else {
+        if odd_change_count < even_change_count {
+            even_change_count = (half_n - v_even[1].1 as i64).abs();
+            println!("{}", odd_change_count + even_change_count);
+            return;
+        } else {
+            odd_change_count = (half_n - v_odd[1].1 as i64).abs();
+            println!("{}", odd_change_count + even_change_count);
+            return;
+        }
+    }
 }
