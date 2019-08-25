@@ -42,5 +42,8 @@ fn rl() -> String {
 }
 
 fn main() {
-    unimplemented!();
+    let s: String = read!(String);
+
+    let a = s.replace(",", " ");
+    println!("{}", &a);
 }
