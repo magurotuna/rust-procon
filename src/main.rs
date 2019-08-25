@@ -42,5 +42,24 @@ fn rl() -> String {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let sp: Vec<(String, usize)> = read![String, usize; n];
+
+    let mut sp: Vec<(usize, String, usize)> = sp
+        .into_iter()
+        .enumerate()
+        .map(|(i, x)| (i, x.0, x.1))
+        .collect();
+
+    sp.sort_by(|x, y| {
+        if x.1 != y.1 {
+            x.1.cmp(&y.1)
+        } else {
+            y.2.cmp(&x.2)
+        }
+    });
+
+    for a in &sp {
+        println!("{}", a.0 + 1);
+    }
 }
