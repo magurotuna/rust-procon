@@ -14,6 +14,8 @@ use std::rc::Rc;
 use std::usize;
 
 const MOD_10_9_7: u64 = 1_000_000_007;
+const INF: i64 = 1_000_000_000_000;
+const MIN_INF: i64 = -1_000_000_000_000;
 
 /// FYI: https://github.com/vain0x/scan-bench
 #[allow(unused_macros)]
