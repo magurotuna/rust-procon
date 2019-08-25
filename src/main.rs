@@ -12,6 +12,8 @@ use std::rc::Rc;
 use std::usize;
 
 const MOD_10_9_7: u64 = 1_000_000_007;
+const INF: i64 = 1_000_000_000_000;
+const MIN_INF: i64 = -1_000_000_000_000;
 
 /// FYI: https://github.com/vain0x/scan-bench
 #[allow(unused_macros)]
@@ -158,32 +160,51 @@ fn main() {
     let a_vec: Vec<usize> = read![[usize]];
 
     let table = vec![2usize, 5, 5, 4, 5, 6, 3, 7, 6];
+    // 使用できる数字とそれを作るのに必要なマッチ本数のタプルのベクタ
     let mut use_digits = Vec::new();
     for a in a_vec {
         let num = table[a - 1];
         use_digits.push((a, num));
     }
-    use_digits.sort_by(|&a, &b| {
-        if a.1 != b.1 {
-            a.1.cmp(&b.1)
-        } else {
-            b.0.cmp(&a.0)
-        }
-    });
 
-    // 同じ本数を使って構成される数字については数字が大きいものだけ使えば十分
-    let mut nums = Vec::new();
-    let use_digits: Vec<(usize, usize)> = use_digits
-        .into_iter()
-        .filter(|&a| {
-            if nums.contains(&a.1) {
-                false
-            } else {
-                nums.push(a.1);
-                true
+    use_digits.sort_by_key(|&x| Rev(x.0));
+
+    // dp[i] := i本のマッチを使って条件を満たす整数を作るときの最大桁数
+    let mut dp = vec![MIN_INF; n + 1];
+
+    // dp[0] = 0
+    dp[0] = 0;
+
+    for i in 2..(n + 1) {
+        let mut tmp_max = MIN_INF;
+        for &digit in &use_digits {
+            let tmp = match i.checked_sub(digit.1) {
+                Some(s) => dp[s] + 1,
+                None => MIN_INF,
+            };
+            if tmp > tmp_max {
+                tmp_max = tmp;
             }
-        })
-        .collect();
+        }
+        dp[i] = tmp_max;
+    }
 
-    println!("{:?}", &use_digits);
+    let mut s = String::new();
+
+    let mut tmp_n = n;
+    for i in 1..(dp[n] + 1) {
+        for &d in &use_digits {
+            let tmp = match tmp_n.checked_sub(d.1) {
+                Some(sub) => sub,
+                None => continue,
+            };
+            if dp[tmp] == dp[tmp_n] - 1 {
+                s.push_str(&d.0.to_string());
+                tmp_n = tmp;
+                break;
+            }
+        }
+    }
+
+    println!("{}", &s);
 }
