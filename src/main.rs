@@ -42,5 +42,19 @@ fn rl() -> String {
 }
 
 fn main() {
-    unimplemented!();
+    let (n, k) = read!(usize, usize);
+
+    let mut ans = 0.0;
+
+    for i in 1..(n + 1) {
+        let mut point = 0;
+        let mut p = 1.0 / n as f64; // i が出る確率
+        point += i;
+        while 1 <= point && point <= k - 1 {
+            p *= 1.0 / 2.0;
+            point *= 2;
+        }
+        ans += p;
+    }
+    println!("{}", &ans);
 }
