@@ -42,5 +42,10 @@ fn rl() -> String {
 }
 
 fn main() {
-    unimplemented!();
+    let (r, d, x) = read!(i64, i64, i64);
+    let mut tmp_x = x;
+    for _i in 1..11 {
+        tmp_x = r * tmp_x - d;
+        println!("{}", &tmp_x);
+    }
 }
