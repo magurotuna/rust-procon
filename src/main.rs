@@ -42,5 +42,17 @@ fn rl() -> String {
 }
 
 fn main() {
-    unimplemented!();
+    let _n = read!(usize);
+    let t: Vec<usize> = read![[usize]];
+    let m = read!(usize);
+    let px: Vec<(usize, usize)> = read![usize, usize; m];
+
+    for i in 0..m {
+        let s: usize = t
+            .iter()
+            .enumerate()
+            .map(|(k, x)| if px[i].0 == k + 1 { px[i].1 } else { *x })
+            .sum();
+        println!("{}", &s);
+    }
 }
