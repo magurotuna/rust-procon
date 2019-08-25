@@ -154,5 +154,36 @@ fn gcd(x: i64, y: i64) -> i64 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() {
-    unimplemented!();
+    let (n, m) = read!(usize, usize);
+    let a_vec: Vec<usize> = read![[usize]];
+
+    let table = vec![2usize, 5, 5, 4, 5, 6, 3, 7, 6];
+    let mut use_digits = Vec::new();
+    for a in a_vec {
+        let num = table[a - 1];
+        use_digits.push((a, num));
+    }
+    use_digits.sort_by(|&a, &b| {
+        if a.1 != b.1 {
+            a.1.cmp(&b.1)
+        } else {
+            b.0.cmp(&a.0)
+        }
+    });
+
+    // 同じ本数を使って構成される数字については数字が大きいものだけ使えば十分
+    let mut nums = Vec::new();
+    let use_digits: Vec<(usize, usize)> = use_digits
+        .into_iter()
+        .filter(|&a| {
+            if nums.contains(&a.1) {
+                false
+            } else {
+                nums.push(a.1);
+                true
+            }
+        })
+        .collect();
+
+    println!("{:?}", &use_digits);
 }
