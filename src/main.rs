@@ -43,11 +43,19 @@ fn rl() -> String {
 
 fn main() {
     let (n, k) = read!(usize, usize);
-    let a: Vec<usize> = read![[usize]];
+    let A: Vec<usize> = read![[usize]];
 
     let mut ans = 0usize;
-    for i in 0..(n - k + 1) {
-        ans += a.iter().skip(i).take(k).sum::<usize>();
+
+    // 累積和
+    let mut imos: Vec<usize> = vec![0; n + 1];
+    for i in 0..n {
+        imos[i + 1] = imos[i] + A[i];
     }
+
+    for i in 0..(n - k + 1) {
+        ans += imos[i + k] - imos[i];
+    }
+
     println!("{}", &ans);
 }
