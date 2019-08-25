@@ -42,5 +42,12 @@ fn rl() -> String {
 }
 
 fn main() {
-    unimplemented!();
+    let (n, k) = read!(usize, usize);
+    let a: Vec<usize> = read![[usize]];
+
+    let mut ans = 0usize;
+    for i in 0..(n - k + 1) {
+        ans += a.iter().skip(i).take(k).sum::<usize>();
+    }
+    println!("{}", &ans);
 }
