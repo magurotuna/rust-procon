@@ -41,6 +41,13 @@ fn rl() -> String {
     buf.trim_right().to_owned()
 }
 
+#[allow(unused_macros)]
+macro_rules! debug {
+    ($($a:expr),*) => {
+        eprintln!(concat!($(stringify!($a), " = {:?}, "),*), $($a),*);
+    }
+}
+
 fn main() {
     let (h, w): (i64, i64) = read!(i64, i64);
 
