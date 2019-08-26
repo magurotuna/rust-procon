@@ -42,5 +42,25 @@ fn rl() -> String {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let A = read![[i64]];
+
+    // 動的計画法
+    // 左からi本目(0-based)の柱にいくための最小コストをdp[i]とする
+    let mut dp = vec![0i64; n];
+
+    dp[0] = 0;
+    dp[1] = (A[1] - A[0]).abs();
+
+    for i in 2..n {
+        let from_prev = (A[i] - A[i - 1]).abs();
+        let from_prev2 = (A[i] - A[i - 2]).abs();
+        dp[i] = if dp[i - 2] + from_prev2 < dp[i - 1] + from_prev {
+            dp[i - 2] + from_prev2
+        } else {
+            dp[i - 1] + from_prev
+        };
+    }
+
+    println!("{}", &dp[n - 1]);
 }
