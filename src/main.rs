@@ -49,5 +49,8 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (xa, ya, xb, yb, xc, yc) = read!(f64, f64, f64, f64, f64, f64);
+
+    let s: f64 = 0.5 * ((xa - xc) * (yb - yc) - (xb - xc) * (ya - yc)).abs();
+    println!("{}", &s);
 }
