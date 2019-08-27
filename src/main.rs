@@ -49,5 +49,9 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(u64);
+
+    let v: Vec<char> = n.to_string().chars().collect();
+    let s = v.iter().fold(0, |acc, &i| acc + i as u64 - 48);
+    println!("{}", if n % s == 0 { "Yes" } else { "No" });
 }
