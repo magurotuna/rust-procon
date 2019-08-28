@@ -49,5 +49,38 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let a = read![[i64]];
+
+    let mut costs: Vec<i64> = Vec::with_capacity(n + 10);
+    // とりあえず取りやめない場合のコストを計算 累積和
+    for i in 0..n {
+        if i == 0 {
+            costs.push(a[0].abs());
+        } else {
+            let prev = costs[i - 1];
+            costs.push((a[i] - a[i - 1]).abs() + prev);
+        }
+    }
+    {
+        let prev = costs[n - 1];
+        costs.push(a[n - 1].abs() + prev);
+    }
+
+    for i in 0..n {
+        if i == 0 {
+            let range1 = costs[n] - costs[1];
+            let x = a[1].abs();
+            println!("{}", range1 + x);
+        } else if i == n - 1 {
+            let range1 = costs[i - 1];
+            let x = a[i - 1].abs();
+            println!("{}", range1 + x);
+        } else {
+            let range1 = costs[i - 1];
+            let range2 = costs[n] - costs[i + 1];
+            let x = (a[i - 1] - a[i + 1]).abs();
+            println!("{}", range1 + x + range2);
+        }
+    }
 }
