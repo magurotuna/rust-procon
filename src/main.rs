@@ -49,5 +49,28 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let int: Vec<u64> = read![[u64]];
+    let mut s = Vec::with_capacity(20);
+
+    for i in 0..(2_usize.pow(5)) {
+        let mut bit = vec![];
+        for j in 0..5 {
+            if 1 << j & i != 0 {
+                bit.push(j);
+            }
+        }
+        if bit.len() != 3 {
+            continue;
+        }
+        let mut tmp = 0;
+        for b in bit {
+            tmp += int[b];
+        }
+        if !s.contains(&tmp) {
+            s.push(tmp);
+        }
+    }
+
+    s.sort();
+    println!("{}", &s[s.len() - 3]);
 }
