@@ -49,5 +49,19 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let a = read![[usize]];
+
+    let mut b: Vec<&usize> = Vec::with_capacity(n);
+    for i in 0..n {
+        b.push(&a[i]);
+        b.reverse();
+    }
+
+    let x = b
+        .iter()
+        .map(|&&y| y.to_string())
+        .collect::<Vec<String>>()
+        .join(" ");
+    println!("{}", &x);
 }
