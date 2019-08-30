@@ -49,5 +49,28 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let w: Vec<String> = read![String; n];
+
+    let w: Vec<Vec<char>> = w.into_iter().map(|s| s.chars().collect()).collect();
+
+    let mut h = HashSet::new();
+
+    let mut last_char = w[0][0];
+
+    for word in &w {
+        if word[0] != last_char {
+            println!("No");
+            return;
+        }
+
+        if h.contains(word) {
+            println!("No");
+            return;
+        }
+
+        last_char = word[word.len() - 1];
+        h.insert(word);
+    }
+    println!("Yes");
 }
