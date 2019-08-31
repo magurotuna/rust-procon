@@ -48,6 +48,108 @@ macro_rules! debug {
     }
 }
 
+#[derive(Debug)]
+struct Node {
+    number: usize,
+    neighbors: RefCell<Vec<usize>>,
+    dist_from_start: Cell<usize>,
+    visited: Cell<bool>,
+}
+
+impl Node {
+    fn new(n: usize) -> Node {
+        Node {
+            number: n,
+            neighbors: RefCell::new(vec![]),
+            dist_from_start: Cell::new(INF as usize),
+            visited: Cell::new(false),
+        }
+    }
+
+    fn update_neighbor(&mut self, neighbors: &[usize]) {
+        let mut x = self.neighbors.borrow_mut();
+        for &n in neighbors {
+            x.push(n);
+        }
+    }
+
+    fn add_neighbor(&mut self, neighbor: usize) {
+        let mut x = self.neighbors.borrow_mut();
+        x.push(neighbor);
+    }
+
+    fn update_dist(&self, value: usize) {
+        self.dist_from_start.set(value);
+    }
+
+    fn is_visited(&self) -> bool {
+        self.visited.get()
+    }
+
+    fn set_visited(&self) {
+        self.visited.set(true);
+    }
+}
+
+fn bfs(towns: &Vec<Node>, current: usize, goal: usize) -> usize {
+    if current == goal {
+        return 1;
+    }
+    let mut queue = VecDeque::new();
+    let town = towns.get(current).unwrap();
+    for &n in town.neighbors.borrow().iter() {
+        queue.push_front(n);
+    }
+    let mut count = 0;
+    while let Some(next) = queue.pop_back() {
+        count += bfs(towns, next, goal);
+    }
+    count
+}
+
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let (a, b) = read!(usize, usize);
+    let m = read!(usize);
+    let roads: Vec<(usize, usize)> = read![usize, usize; m];
+    // 道路の接続を示す町の番号を0-basedに直す
+    let roads: Vec<(usize, usize)> = roads.into_iter().map(|(x, y)| (x - 1, y - 1)).collect();
+    let (a, b): (usize, usize) = (a - 1, b - 1);
+
+    let mut towns = Vec::with_capacity(n);
+    for i in 0..n {
+        let node = if i == a {
+            let node = Node::new(i);
+            node.update_dist(0);
+            node
+        } else {
+            Node::new(i)
+        };
+        towns.push(node);
+    }
+    for i in 0..m {
+        let (from, to) = roads[i];
+        towns[from].add_neighbor(to);
+        towns[to].add_neighbor(from);
+    }
+
+    let mut queue = VecDeque::new();
+    queue.push_front(a);
+    while let Some(next) = queue.pop_back() {
+        let next_town = towns.get(next).unwrap();
+        // ゴールに着いた場合
+        if next == b {}
+        // 訪問済みだったらスキップ
+        if next_town.is_visited() {
+            continue;
+        }
+        // 訪問済みにする
+        next_town.set_visited();
+        // 探索リストに追加
+        for &n in next_town.neighbors.borrow().iter() {
+            queue.push_front(n);
+        }
+    }
+
+    println!("{}", bfs(&towns, a, b));
 }
