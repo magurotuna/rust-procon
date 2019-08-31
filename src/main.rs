@@ -3,7 +3,7 @@
 #![allow(dead_code)]
 #![allow(deprecated)]
 
-use std::cell::RefCell;
+use std::cell::{Cell, Ref, RefCell};
 use std::cmp::{max, min, Ordering};
 use std::collections::*;
 use std::fmt::{Debug, Formatter, Write as FmtWrite};
