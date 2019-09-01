@@ -68,7 +68,7 @@ fn main() {
     }
     let i = c.iter().position(|&x| x != '1').unwrap();
     let d = c.get(i).unwrap();
-    if k0 > i {
+    if k0 >= i {
         println!("{}", d);
     } else {
         println!("1");
