@@ -50,43 +50,27 @@ macro_rules! debug {
 }
 
 fn main() {
-    let (n, m) = read!(usize, usize);
+    let (n, m): (usize, usize) = read!(usize, usize);
 
-    // DPでやってみる
-    // dp[i][j] := 人間の数i, 足の数jに対して存在しうる大人、老人、赤ちゃんの人数x, y, zの組合せ (x, y, z)
-    // と定義
-    let mut dp: Vec<Vec<Option<(usize, usize, usize)>>> = vec![vec![None; m + 100]; n + 100];
-    dp[0][1] = Some((1, 0, 0));
-    dp[0][2] = Some((0, 1, 0));
-    dp[0][3] = Some((0, 0, 1));
+    // 赤ちゃんの人数zを固定した上でxとyについて鶴亀算をする
+    for z in 0..(n + 1) {
+        // 赤ちゃんの足の本数は4z
+        // 2x + 3y = M - 4z かつ x + y = N - z
+        // を満たすような(x, y)を求める
+        let leg_s = m - 4 * z;
+        let num_s = n - z;
 
-    for i in 1..n {
-        for j in (2 * i + 1)..(4 * i + 4) {
-            'k: for k in 2..5 {
-                let mut update_flag = false;
-                dp[i][j] = match dp[i - 1][j - k] {
-                    Some((x, y, z)) => {
-                        update_flag = true;
-                        if k == 2 {
-                            Some((x + 1, y, z))
-                        } else if k == 3 {
-                            Some((x, y + 1, z))
-                        } else {
-                            Some((x, y, z + 1))
-                        }
-                    }
-                    None => None,
-                };
-                if update_flag {
-                    break 'k;
-                }
-            }
+        // 仮に (x, y) = (N - z, 0) であるとする
+        let leg_tmp = 2 * num_s;
+        let diff = leg_s as i64 - leg_tmp as i64;
+        // xを1減らしyを1増やすと足の本数は1つ増えるということに着目
+        if 0 <= diff && diff <= num_s as i64 {
+            let x = num_s as i64 - diff;
+            let y = diff;
+            println!("{} {} {}", x, y, z);
+            return;
         }
     }
 
-    let (x, y, z) = match dp[n - 1][m - 1] {
-        Some(t) => (t.0 as i64, t.1 as i64, t.2 as i64),
-        None => (-1, -1, -1),
-    };
-    println!("{} {} {}", x, y, z);
+    println!("-1 -1 -1");
 }
