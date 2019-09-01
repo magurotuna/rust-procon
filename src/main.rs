@@ -113,7 +113,43 @@ fn d() {
 }
 
 fn e() {
-    unimplemented!();
+    let n = read!(usize);
+    let mut a: Vec<VecDeque<usize>> = Vec::with_capacity(n);
+    for i in 0..n {
+        let v: Vec<usize> = read![[usize]];
+        a.push(v.into_iter().map(|x| x - 1).collect());
+    }
+
+    let mut days = 0;
+    while a.iter().any(|v| v.len() > 0) {
+        days += 1;
+        let mut combo = Vec::new();
+        'p1: for i in 0..(n - 1) {
+            if a[i].len() == 0 {
+                continue 'p1;
+            }
+            'p2: for j in (i + 1)..n {
+                if a[j].len() == 0 {
+                    continue 'p2;
+                }
+                if a[j][0] == i && a[i][0] == j {
+                    combo.push((i, j));
+                    continue 'p1;
+                }
+            }
+        }
+
+        if combo.len() == 0 {
+            println!("-1");
+            return;
+        }
+
+        for (p1, p2) in combo {
+            a[p1].pop_front();
+            a[p2].pop_front();
+        }
+    }
+    println!("{}", days);
 }
 
 fn f() {
@@ -121,5 +157,5 @@ fn f() {
 }
 
 fn main() {
-    a();
+    e();
 }
