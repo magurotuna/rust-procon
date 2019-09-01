@@ -50,5 +50,20 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let a: usize = read!(usize);
+    let b: usize = read!(usize);
+    let c: usize = read!(usize);
+    let X: usize = read!(usize);
+    let mut ans = 0;
+    for x in 0..(a + 1) {
+        for y in 0..(b + 1) {
+            for z in 0..(c + 1) {
+                let amount = 500 * x + 100 * y + 50 * z;
+                if amount == X {
+                    ans += 1;
+                }
+            }
+        }
+    }
+    println!("{}", ans);
 }
