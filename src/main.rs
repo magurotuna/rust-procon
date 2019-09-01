@@ -50,7 +50,18 @@ macro_rules! debug {
 }
 
 fn a() {
-    unimplemented!();
+    let s = read!(String);
+    let t = read!(String);
+
+    let c_s: Vec<char> = s.chars().collect::<Vec<char>>();
+    let t_s: Vec<char> = t.chars().collect::<Vec<char>>();
+    let mut ans = 0;
+    for i in 0..c_s.len() {
+        if c_s[i] == t_s[i] {
+            ans += 1;
+        }
+    }
+    println!("{}", ans);
 }
 
 fn b() {
