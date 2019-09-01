@@ -50,5 +50,27 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let s = read!(String);
+    let k = read!(usize);
+    let k0 = k - 1; // 0-based
+
+    // 文字列sを左から見ていって、1以外の数字がはじめて登場するインデックスをi、その1以外の数字をdとする
+    // ex: "2345" なら i = 0, d = 2
+    // ex: "12345" なら i = 1, d = 2
+    // ex: "11111342" なら i = 5, d = 3
+    // 5000兆日後のsは、インデックス0からi-1までは「1」、それ以降はdがずっと並ぶ形になる（少なくともk <= 10^18 の範囲においては）
+    // このようなiとdを求めて、k0 <= i - 1 ならば1, そうでないならdを出力すればよい
+
+    let c: Vec<char> = s.chars().collect();
+    if c.iter().all(|&x| x == '1') {
+        println!("1");
+        return;
+    }
+    let i = c.iter().position(|&x| x != '1').unwrap();
+    let d = c.get(i).unwrap();
+    if k0 > i {
+        println!("{}", d);
+    } else {
+        println!("1");
+    }
 }
