@@ -65,7 +65,18 @@ fn a() {
 }
 
 fn b() {
-    unimplemented!();
+    let (a, b) = read!(usize, usize);
+    if b == 1 {
+        println!("0");
+        return;
+    }
+    let mut ans = 1;
+    let mut cnt = a;
+    while cnt < b {
+        ans += 1;
+        cnt += a - 1;
+    }
+    println!("{}", ans);
 }
 
 fn c() {
