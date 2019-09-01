@@ -106,7 +106,10 @@ fn c() {
 }
 
 fn d() {
-    unimplemented!();
+    let n = read!(usize);
+
+    let ans = (n * (n - 1)) / 2;
+    println!("{}", ans);
 }
 
 fn e() {
