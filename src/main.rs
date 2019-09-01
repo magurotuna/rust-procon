@@ -50,5 +50,17 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let mut a: Vec<usize> = read![[usize]];
+    let mut b: Vec<usize> = read![[usize]];
+
+    a.sort();
+    b.sort();
+
+    let ans = if a.iter().enumerate().all(|(i, &x)| x <= b[i]) {
+        "Yes"
+    } else {
+        "No"
+    };
+    println!("{}", ans);
 }
