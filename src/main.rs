@@ -124,39 +124,33 @@ impl<T: Ord> Ord for Rev<T> {
 
 fn resolve() {
     let s: String = read!(String);
-
-    // n-1文字目まで分割可能であればtrue そうでなければfalse
-    // とりあえずfalseで初期化
-    let mut dp: Vec<bool> = vec![false; 10usize.pow(5)];
-    // スタートだけtrueにしておく
-    dp[0] = true;
+    let mut c = s.chars().collect::<Vec<char>>();
+    c.reverse();
+    let mut s = c.into_iter().collect::<String>();
 
     let words = ["dream", "dreamer", "erase", "eraser"];
-    let s_len = s.len();
+    let rev_words = words
+        .iter()
+        .map(|&x| {
+            let mut tmp = x.chars().collect::<Vec<char>>();
+            tmp.reverse();
+            tmp.into_iter().collect::<String>()
+        })
+        .collect::<Vec<String>>();
 
-    for i in 0..s_len {
-        if !dp[i] {
-            continue;
-        }
-        for word in &words {
-            if s_len < i + word.len() {
-                continue;
+    'outer: while s.len() != 0 {
+        for w in &rev_words {
+            if s.starts_with(w) {
+                for i in 0..w.len() {
+                    s.remove(0);
+                }
+                continue 'outer;
             }
-            if &s[i..(i + word.len())] == *word {
-                dp[i + word.len()] = true;
-            }
-            // v1.15.1 だと get が使えない……
-            //            match s.get(i..(i + word.len())) {
-            //                Some(part_s) => {
-            //                    if part_s == *word {
-            //                    }
-            //                }
-            //                None => (),
-            //            }
         }
+        println!("NO");
+        return;
     }
-
-    println!("{}", if dp[s_len] { "YES" } else { "NO" });
+    println!("YES");
 }
 
 fn main() {
