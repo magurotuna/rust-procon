@@ -78,6 +78,10 @@ impl Node {
         x.push(neighbor);
     }
 
+    fn get_dist(&self) -> usize {
+        self.dist_from_start.get()
+    }
+
     fn update_dist(&self, value: usize) {
         self.dist_from_start.set(value);
     }
@@ -89,22 +93,6 @@ impl Node {
     fn set_visited(&self) {
         self.visited.set(true);
     }
-}
-
-fn bfs(towns: &Vec<Node>, current: usize, goal: usize) -> usize {
-    if current == goal {
-        return 1;
-    }
-    let mut queue = VecDeque::new();
-    let town = towns.get(current).unwrap();
-    for &n in town.neighbors.borrow().iter() {
-        queue.push_front(n);
-    }
-    let mut count = 0;
-    while let Some(next) = queue.pop_back() {
-        count += bfs(towns, next, goal);
-    }
-    count
 }
 
 fn main() {
@@ -133,23 +121,35 @@ fn main() {
         towns[to].add_neighbor(from);
     }
 
+    let mut n_routes = vec![0usize; n];
+    n_routes[a] = 1;
+
+    // スタートからの最短距離を幅優先探索で求める
     let mut queue = VecDeque::new();
     queue.push_front(a);
-    while let Some(next) = queue.pop_back() {
-        let next_town = towns.get(next).unwrap();
-        // ゴールに着いた場合
-        if next == b {}
+    while let Some(current) = queue.pop_back() {
+        let current_town = towns.get(current).unwrap();
         // 訪問済みだったらスキップ
-        if next_town.is_visited() {
+        if current_town.is_visited() {
             continue;
         }
         // 訪問済みにする
-        next_town.set_visited();
-        // 探索リストに追加
-        for &n in next_town.neighbors.borrow().iter() {
-            queue.push_front(n);
+        current_town.set_visited();
+
+        for &nei in current_town.neighbors.borrow().iter() {
+            // 隣町を探索リストに追加
+            queue.push_front(nei);
+            // 隣町までの距離を更新
+            let current_town_dist = current_town.get_dist();
+            let n_town = towns.get(nei).unwrap();
+            if n_town.get_dist() == INF as usize {
+                n_town.update_dist(current_town_dist + 1);
+                n_routes[nei] += n_routes[current] % MOD_10_9_7 as usize;
+                continue;
+            } else if n_town.get_dist() == current_town_dist + 1 {
+                n_routes[nei] += n_routes[current] % MOD_10_9_7 as usize;
+            }
         }
     }
-
-    println!("{}", bfs(&towns, a, b));
+    println!("{}", n_routes[b] % MOD_10_9_7 as usize);
 }
