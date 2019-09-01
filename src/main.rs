@@ -51,19 +51,15 @@ macro_rules! debug {
 
 fn main() {
     let n = read!(usize);
-    let mut a: Vec<i64> = read![[i64]];
-    let mut b: Vec<i64> = read![[i64]];
+    let a: Vec<i64> = read![[i64]];
+    let b: Vec<i64> = read![[i64]];
 
-    a.sort();
-    b.sort();
-
-    let mut a_sub_b = 0;
     let mut b_sub_a = 0; // 肩代わり可能な数
+    let mut a_sub_b = 0; // 肩代わりされなければならない数
     for i in 0..n {
-        if b[i] - a[i] >= 2 {
+        if b[i] >= a[i] {
             b_sub_a += (b[i] - a[i]) / 2;
-            continue;
-        } else if a[i] > b[i] {
+        } else {
             a_sub_b += a[i] - b[i];
         }
     }
