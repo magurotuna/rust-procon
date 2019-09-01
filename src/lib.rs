@@ -1,3 +1,4 @@
+pub mod binary_search;
 pub mod character;
 pub mod comparator;
 pub mod integer;
