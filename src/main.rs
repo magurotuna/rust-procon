@@ -1,4 +1,5 @@
 #![allow(unused_imports)]
+#![allow(unused_variables)]
 #![allow(non_snake_case)]
 #![allow(dead_code)]
 #![allow(deprecated)]
@@ -49,5 +50,31 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (n, m) = read!(usize, usize);
+    let mut s: Vec<Vec<usize>> = Vec::with_capacity(m);
+    for i in 0..m {
+        s.push(read![[usize]].into_iter().skip(1).map(|x| x - 1).collect());
+    }
+    let p: Vec<usize> = read![[usize]];
+
+    let mut ans = 0;
+    // bit全探索 スイッチ数は高々10なので計算量的には問題なさそう
+    'bits: for bits in 0..2usize.pow(n as u32) {
+        let tmp = vec![false; n];
+        let status: Vec<bool> = tmp
+            .into_iter()
+            .enumerate()
+            .map(|(index, _)| 1 << index & bits != 0)
+            .collect();
+        'inner: for i in 0..m {
+            let num_on = s[i].iter().filter(|&&x| status[x]).count();
+            if num_on % 2 == p[i] {
+                continue 'inner;
+            } else {
+                continue 'bits;
+            }
+        }
+        ans += 1;
+    }
+    println!("{}", ans);
 }
