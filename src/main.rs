@@ -80,7 +80,29 @@ fn b() {
 }
 
 fn c() {
-    unimplemented!();
+    let n = read!(usize);
+    let h: Vec<usize> = read![[usize]];
+
+    // 最長部分減少列（ただし連続）の長さを求める その長さ-1が答え
+    let mut max_len = 0;
+    let mut len = 0;
+    let mut prev_h = 0;
+    for i in 0..n {
+        if prev_h >= h[i] {
+            prev_h = h[i];
+            len += 1;
+        } else {
+            prev_h = h[i];
+            if max_len < len {
+                max_len = len;
+            }
+            len = 1;
+        }
+    }
+    if max_len < len {
+        max_len = len;
+    }
+    println!("{}", max_len - 1);
 }
 
 fn d() {
