@@ -49,6 +49,30 @@ macro_rules! debug {
     }
 }
 
-fn main() {
+fn a() {
     unimplemented!();
+}
+
+fn b() {
+    unimplemented!();
+}
+
+fn c() {
+    unimplemented!();
+}
+
+fn d() {
+    unimplemented!();
+}
+
+fn e() {
+    unimplemented!();
+}
+
+fn f() {
+    unimplemented!();
+}
+
+fn main() {
+    a();
 }
