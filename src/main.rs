@@ -50,5 +50,43 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (n, m) = read!(usize, usize);
+
+    // DPでやってみる
+    // dp[i][j] := 人間の数i, 足の数jに対して存在しうる大人、老人、赤ちゃんの人数x, y, zの組合せ (x, y, z)
+    // と定義
+    let mut dp: Vec<Vec<Option<(usize, usize, usize)>>> = vec![vec![None; m + 100]; n + 100];
+    dp[0][1] = Some((1, 0, 0));
+    dp[0][2] = Some((0, 1, 0));
+    dp[0][3] = Some((0, 0, 1));
+
+    for i in 1..n {
+        for j in (2 * i + 1)..(4 * i + 4) {
+            'k: for k in 2..5 {
+                let mut update_flag = false;
+                dp[i][j] = match dp[i - 1][j - k] {
+                    Some((x, y, z)) => {
+                        update_flag = true;
+                        if k == 2 {
+                            Some((x + 1, y, z))
+                        } else if k == 3 {
+                            Some((x, y + 1, z))
+                        } else {
+                            Some((x, y, z + 1))
+                        }
+                    }
+                    None => None,
+                };
+                if update_flag {
+                    break 'k;
+                }
+            }
+        }
+    }
+
+    let (x, y, z) = match dp[n - 1][m - 1] {
+        Some(t) => (t.0 as i64, t.1 as i64, t.2 as i64),
+        None => (-1, -1, -1),
+    };
+    println!("{} {} {}", x, y, z);
 }
