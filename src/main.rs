@@ -50,5 +50,21 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (n, m) = read!(usize, usize);
+    let edges: Vec<(usize, usize)> = read![usize,usize; m];
+    let edges: Vec<(usize, usize)> = edges.into_iter().map(|(x, y)| (x - 1, y - 1)).collect();
+
+    debug!(edges);
+    // 隣接行列を作成
+    let adj = vec![vec![false; n]; n]
+        .into_iter()
+        .enumerate()
+        .map(|(i, row)| {
+            row.into_iter()
+                .enumerate()
+                .map(|(j, _val)| edges.contains(&(i, j)) || edges.contains(&(j, i)))
+                .collect::<Vec<bool>>()
+        })
+        .collect::<Vec<Vec<bool>>>();
+    println!("{:?}", &adj);
 }
