@@ -50,5 +50,18 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let mut a: Vec<Vec<usize>> = Vec::new();
+    for i in 0..2 {
+        a.push(read![[usize]]);
+    }
+    let mut ans = 0;
+    for i in 0..n {
+        let s: usize = a[0].iter().take(i + 1).sum::<usize>()
+            + a[1].iter().by_ref().skip(i).take(n - i).sum::<usize>();
+        if s > ans {
+            ans = s;
+        }
+    }
+    println!("{}", ans);
 }
