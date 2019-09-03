@@ -50,5 +50,11 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let x = read!(usize);
+    let a = read!(usize);
+    let b = read!(usize);
+    let mut remain = x;
+    remain -= a;
+    remain -= b * (remain / b);
+    println!("{}", remain);
 }
