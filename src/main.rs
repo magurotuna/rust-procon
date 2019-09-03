@@ -57,8 +57,12 @@ fn main() {
     }
     let mut ans = 0;
     for i in 0..n {
-        let s: usize = a[0].iter().take(i + 1).sum::<usize>()
-            + a[1].iter().by_ref().skip(i).take(n - i).sum::<usize>();
+        // vec.get(range) という書き方もできる。skipとtakeを同時に使うにはby_refしないといけない、とかを気にせずに済むのでこれもありかも
+        let s1 = a[0].get(0..(i + 1)).unwrap().iter().sum::<usize>();
+        let s2 = a[1].get(i..n).unwrap().iter().sum::<usize>();
+        //        let s: usize = a[0].iter().take(i + 1).sum::<usize>()
+        //            + a[1].iter().by_ref().skip(i).take(n - i).sum::<usize>();
+        let s = s1 + s2;
         if s > ans {
             ans = s;
         }
