@@ -50,5 +50,20 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let (d, x) = read!(usize, usize);
+    let a: Vec<usize> = read!(usize; n);
+
+    let mut ans = x;
+
+    for i in 0..n {
+        let mut count = 0;
+        let mut day = 1;
+        while day <= d {
+            count += 1;
+            day += a[i];
+        }
+        ans += count;
+    }
+    println!("{}", ans);
 }
