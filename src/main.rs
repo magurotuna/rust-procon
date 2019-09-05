@@ -50,5 +50,6 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (a, b) = read!(usize, usize);
+    println!("{}", (a - 1) * (b - 1));
 }
