@@ -50,5 +50,6 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (n, m) = read!(usize, usize);
+    println!("{}", (100 * n + 1800 * m) * 2usize.pow(m as u32));
 }
