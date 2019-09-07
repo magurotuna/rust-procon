@@ -50,5 +50,51 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(u64);
+
+    // nが 2^(d-1)以上 2^d 未満の場合、nの深さがdである、ということにする
+    let mut d = 1;
+    loop {
+        if 2u64.pow(d - 1) <= n && n < 2u64.pow(d) {
+            break;
+        }
+        d += 1;
+    }
+
+    let mut x = 1u64;
+    if d % 2 == 0 {
+        // Takahashiは2xを、Aokiは2x+1を選ぶのが最善である場合
+        loop {
+            // Takahashiの操作
+            x = 2 * x;
+            if x > n {
+                println!("Aoki");
+                return;
+            }
+
+            // Aokiの操作
+            x = 2 * x + 1;
+            if x > n {
+                println!("Takahashi");
+                return;
+            }
+        }
+    } else {
+        // Takahashiは2x+1を、Aokiは2xを選ぶのが最善である場合
+        loop {
+            // Takahashiの操作
+            x = 2 * x + 1;
+            if x > n {
+                println!("Aoki");
+                return;
+            }
+
+            // Aokiの操作
+            x = 2 * x;
+            if x > n {
+                println!("Takahashi");
+                return;
+            }
+        }
+    }
 }
