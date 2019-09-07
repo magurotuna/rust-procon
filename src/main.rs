@@ -121,21 +121,26 @@ fn e() {
     }
 
     let mut days = 0;
+    // 対戦があるかを調べなければならないプレイヤーの番号。
+    // 初日は当然全プレイヤーを調べなければならないが、2日目以降は「前日に対戦があって試合を消化したプレイヤー」のみを調べていく
+    let mut player_for_search: Vec<usize> = (0..n).collect();
+
     while a.iter().any(|v| v.len() > 0) {
         days += 1;
-        let mut combo = Vec::new();
-        'p1: for i in 0..(n - 1) {
-            if a[i].len() == 0 {
+        let mut combo = Vec::with_capacity(1000);
+        'p1: for &i in player_for_search.iter().filter(|&&x| !a[x].is_empty()) {
+            let opponent = a[i][0];
+            let op_of_op = a[opponent][0];
+            if i != op_of_op {
                 continue 'p1;
             }
-            'p2: for j in (i + 1)..n {
-                if a[j].len() == 0 {
-                    continue 'p2;
-                }
-                if a[j][0] == i && a[i][0] == j {
-                    combo.push((i, j));
-                    continue 'p1;
-                }
+            let tup = if i <= opponent {
+                (i, opponent)
+            } else {
+                (opponent, i)
+            };
+            if !combo.contains(&tup) {
+                combo.push(tup);
             }
         }
 
@@ -144,9 +149,13 @@ fn e() {
             return;
         }
 
+        player_for_search.clear();
+
         for (p1, p2) in combo {
             a[p1].pop_front();
             a[p2].pop_front();
+            player_for_search.push(p1);
+            player_for_search.push(p2);
         }
     }
     println!("{}", days);
