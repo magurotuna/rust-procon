@@ -49,6 +49,16 @@ macro_rules! debug {
     }
 }
 
+pub fn gcd(a: u64, b: u64) -> u64 {
+    if b == 0 {
+        a
+    } else {
+        gcd(b, a % b)
+    }
+}
+
 fn main() {
-    unimplemented!();
+    let (w, h) = read!(u64, u64);
+    let g = gcd(w, h);
+    println!("{}", if w / g == 4 { "4:3" } else { "16:9" });
 }
