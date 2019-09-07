@@ -50,5 +50,10 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (a, op, b) = read!(i64, String, i64);
+    if op == "+" {
+        println!("{}", a + b);
+    } else {
+        println!("{}", a - b);
+    }
 }
