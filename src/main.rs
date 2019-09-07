@@ -49,6 +49,99 @@ macro_rules! debug {
     }
 }
 
-fn main() {
+fn a() {
+    let n = read!(usize);
+    println!("{}", n.pow(3));
+}
+
+fn b() {
+    let n = read!(usize);
+    let a = read!([usize]);
+    let b = read!([usize]);
+    let c = read!([usize]);
+    let mut ans = 0;
+    for i in 0..n {
+        if i == 0 {
+            ans += b[a[i] - 1];
+        } else {
+            ans += b[a[i] - 1];
+            if a[i - 1] + 1 == a[i] {
+                ans += c[a[i - 1] - 1];
+            }
+        }
+    }
+    println!("{}", ans);
+}
+
+fn c() {
+    let n = read!(usize);
+    let b: Vec<usize> = read![[usize]];
+
+    //    if n == 2 {
+    //        println!("{}", b[0] * 2);
+    //        return;
+    //    }
+
+    let mut v = Vec::with_capacity(n + 1);
+    v.push(INF as usize);
+    v.extend(b);
+    v.push(INF as usize);
+
+    let mut ans = 0;
+    for i in 1..(n + 1) {
+        ans += min(v[i - 1], v[i]);
+    }
+    println!("{}", ans);
+
+    //    let mut a = Vec::with_capacity(n);
+    //    if b[0] <= b[1] {
+    //        a.push(b[0]);
+    //        a.push(b[0]);
+    //    } else {
+    //        a.push(b[1]);
+    //        a.push(b[0]);
+    //    }
+    //    for i in 0..(n - 1) {
+    //
+    //    }
+}
+
+fn d() {
+    let (n, k) = read!(usize, usize);
+    let s: String = read!(String);
+
+    let c = s.chars().collect::<Vec<char>>();
+    // 全員が同じ方向を向いていない限り、操作によって絶対に全体の幸福度を少なくとも1は上げることができる
+    // 現時点で幸福な人は、操作区間の両端以外に含まれている場合、操作後も幸福を継続できる
+    // 操作によって変化する可能性のある幸福度は、操作区間の両端の人の幸福度のみ。
+    // したがって1回の操作で変化しうる幸福度は高々2であり、最初の考察と合わせて、1回の操作で変化する幸福度は 1 or 2 である（ただしすべての人が同じ方向を向いていない場合）
+    // 1回の操作で幸福度を2あげるような区間の選び方ができるかを検討する
+
+    // LとRの「変わり目」の数をカウントする
+    let mut count = 0;
+    for i in 1..c.len() {
+        if c[i] != c[i - 1] {
+            count += 1;
+        }
+    }
+    // 操作1回で変わり目は最大で2個減る。
+    if 2 * k >= count {
+        println!("{}", n - 1);
+        return;
+    }
+    // n - 変わり目の個数 - 1 が幸福度
+    let d = count - 2 * k;
+    println!("{}", n - d - 1);
+}
+
+fn e() {
     unimplemented!();
+}
+
+fn f() {
+    unimplemented!();
+}
+
+fn main() {
+    d();
 }
