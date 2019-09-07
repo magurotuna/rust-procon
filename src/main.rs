@@ -161,10 +161,59 @@ fn e() {
     println!("{}", days);
 }
 
+#[derive(PartialEq, PartialOrd)]
+pub struct OrdFloat<T>(pub T);
+
+impl<T: PartialEq> Eq for OrdFloat<T> {}
+
+impl<T: PartialOrd> Ord for OrdFloat<T> {
+    fn cmp(&self, other: &OrdFloat<T>) -> Ordering {
+        self.0.partial_cmp(&other.0).unwrap()
+    }
+}
+
 fn f() {
-    unimplemented!();
+    let n = read!(usize);
+    let mut engines: Vec<(i64, i64)> = Vec::with_capacity(n);
+    for i in 0..n {
+        engines.push(read!(i64, i64));
+    }
+
+    // engineのそれぞれのベクトルに対して、x軸の正方向となす角を計算
+    let mut engines = engines
+        .into_iter()
+        .map(|(x, y)| {
+            let cos = (x as f64) / ((x as f64).powi(2i32) + (y as f64).powi(2i32)).sqrt();
+            let rad = if y >= 0 {
+                cos.acos()
+            } else {
+                2.0 * std::f64::consts::PI - cos.acos()
+            };
+            (x, y, rad)
+        })
+        .collect::<Vec<(i64, i64, f64)>>();
+    engines.sort_by_key(|&f| OrdFloat(f.2));
+
+    let mut ans = 0.0;
+
+    for i in 0..n {
+        let vector = engines
+            .iter()
+            .filter(|&&x| {
+                let &first_engine = &engines[i];
+                first_engine.0 * x.0 + first_engine.1 * x.1 >= 0
+            })
+            .fold((0, 0), |acc, x| (acc.0 + x.0, acc.1 + x.1));
+
+        let dist = ((vector.0.pow(2u32) + vector.1.pow(2u32)) as f64).sqrt();
+        if dist > ans {
+            ans = dist;
+        }
+    }
+
+    println!("{}", ans);
 }
 
 fn main() {
-    e();
+    f();
 }
