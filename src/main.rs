@@ -50,5 +50,38 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (n, q) = read!(usize, usize);
+    let mut vec: Vec<(usize, usize)> = Vec::with_capacity(q);
+    for i in 0..q {
+        let input = read!(usize, usize);
+        vec.push((input.0 - 1, input.1));
+    }
+
+    // いもす法
+    let mut table = vec![0; n + 1];
+
+    for v in &vec {
+        table[v.0] += 1;
+        table[v.1] -= 1;
+    }
+
+    let mut s = vec![0; n + 1];
+    for i in 0usize..n {
+        let index = i.checked_sub(1).unwrap_or(0);
+        s[i] = s[index] + table[i];
+    }
+
+    println!(
+        "{}",
+        &s[0..n]
+            .iter()
+            .map(|&x| {
+                if x % 2 == 0 {
+                    '0'
+                } else {
+                    '1'
+                }
+            })
+            .collect::<String>()
+    );
 }
