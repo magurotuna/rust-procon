@@ -50,5 +50,40 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (n, m) = read!(usize, usize);
+    let mut list: Vec<(usize, usize, usize)> = Vec::with_capacity(m);
+    for i in 0..m {
+        let input = read!(usize, usize);
+        list.push((i, input.0, input.1));
+    }
+
+    list.sort_by(|x, y| {
+        if x.1 != y.1 {
+            x.1.cmp(&y.1)
+        } else {
+            x.2.cmp(&y.2)
+        }
+    });
+
+    let mut numbered = Vec::with_capacity(m);
+    let mut pref_number = list.first().unwrap().1;
+    let mut city_birth_order = 0;
+    for &city in &list {
+        if pref_number == city.1 {
+            city_birth_order += 1;
+        } else {
+            pref_number = city.1;
+            city_birth_order = 1;
+        }
+        numbered.push((
+            city.0,
+            format!("{:>06}{:>06}", &pref_number, &city_birth_order),
+        ));
+    }
+
+    numbered.sort_by_key(|x| x.0);
+
+    for ans in &numbered {
+        println!("{}", ans.1);
+    }
 }
