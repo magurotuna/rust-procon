@@ -50,5 +50,35 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+
+    // dp[i] := i円を実現可能な最小の操作回数 とする
+    let mut dp: Vec<usize> = vec![INF as usize; n + 1];
+
+    dp[0] = 0; // 0円
+    dp[1] = 1; // 1円
+    for i in 2..(n + 1) {
+        let mut count = i; // 最悪でも1円ずつi回引き出せば実現できる
+
+        let mut six_index = 1;
+        let mut nine_index = 1;
+        while i >= 6usize.pow(six_index) {
+            let tmp_cnt = dp[i - 6usize.pow(six_index)] + 1;
+            if tmp_cnt < count {
+                count = tmp_cnt;
+            }
+            six_index += 1;
+        }
+        while i >= 9usize.pow(nine_index) {
+            let tmp_cnt = dp[i - 9usize.pow(nine_index)] + 1;
+            if tmp_cnt < count {
+                count = tmp_cnt;
+            }
+            nine_index += 1;
+        }
+
+        dp[i] = count;
+    }
+
+    println!("{}", dp[n]);
 }
