@@ -50,5 +50,70 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (a, b, c, d, e, f) = read!(i32, i32, i32, i32, i32, i32);
+
+    // 制約を考慮にいれると、水の入れ方は100gから2900gまで100g刻みでの29通りしかありえない（実現可能性は置いておいて）
+    // この29通りの入れ方が実現可能であるかどうかをまず求める
+    let mut available_water = Vec::with_capacity(30);
+    'out: for i in 1..30 {
+        let water = 100 * i;
+        if water >= f {
+            break;
+        }
+
+        for j in 0..((i / a) + 1) {
+            for k in 0..((i / b) + 1) {
+                if 100 * a * j + 100 * b * k == water {
+                    available_water.push(water);
+                    continue 'out;
+                }
+            }
+        }
+    }
+
+    let mut max_dens = 0.0;
+    let mut ans1 = 100 * a;
+    let mut ans2 = 0;
+
+    // 実現可能な水の質量に対して砂糖をどれだけ入れるかを考える
+    for &w in &available_water {
+        let max_sugar = w * e / 100;
+
+        let mut actual_max_sugar = 0;
+
+        's1: for i in 0..((max_sugar / c) + 1) {
+            for j in 0..((max_sugar / d) + 1) {
+                let sugar_weight = c * i + d * j;
+                // ビーカーの質量制限
+                if w + sugar_weight > f {
+                    continue;
+                }
+
+                // 最大溶解量を超える場合
+                if sugar_weight > max_sugar {
+                    continue;
+                }
+
+                // 最大溶解量まで砂糖を溶かすことができる場合
+                if sugar_weight == max_sugar {
+                    actual_max_sugar = sugar_weight;
+                    break 's1;
+                }
+
+                // 最大までは解かせない場合
+                if sugar_weight > actual_max_sugar {
+                    actual_max_sugar = sugar_weight;
+                }
+            }
+        }
+
+        let dens = (100.0 * actual_max_sugar as f64) / ((w + actual_max_sugar) as f64);
+        if dens > max_dens {
+            max_dens = dens;
+            ans1 = w + actual_max_sugar;
+            ans2 = actual_max_sugar;
+        }
+    }
+
+    println!("{} {}", ans1, ans2);
 }
