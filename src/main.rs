@@ -50,5 +50,18 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let s: String = read!(String);
+
+    // ランレングス圧縮
+    let mut encoded = String::with_capacity(s.len());
+    let mut prev = 'X';
+    for c in s.chars() {
+        if prev == c {
+            continue;
+        }
+        encoded.push(c);
+        prev = c;
+    }
+
+    println!("{}", encoded.len() - 1);
 }
