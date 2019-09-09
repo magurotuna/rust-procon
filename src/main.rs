@@ -50,5 +50,15 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let s = read!(String);
+    let t = read!(String);
+
+    let mut sc: Vec<_> = s.chars().collect();
+    let mut tc: Vec<_> = t.chars().collect();
+
+    sc.sort();
+    tc.sort();
+    tc.reverse();
+
+    println!("{}", if sc < tc { "Yes" } else { "No" });
 }
