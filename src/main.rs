@@ -64,56 +64,43 @@ fn main() {
     let (d, g) = read!(i32, i32);
     let pc: Vec<(i32, i32)> = read![i32, i32; d];
 
-    // (問題数, コンプリートボーナス, コンプリートボーナスなしの場合の1問あたりの点数, ありの場合の1問あたりの点数)
-    let mut pc: Vec<_> = pc
-        .into_iter()
-        .enumerate()
-        .map(|(i, (x, y))| {
-            let p_per_q = (i as i32 + 1) * 100;
-            let comp_point = p_per_q * x + y;
-            let point_per_q = comp_point as f64 / x as f64;
-            (x, y, p_per_q, point_per_q)
-        })
-        .collect();
+    let mut ans = 100000000;
+    // 完全に解く問題をbit全探索する
+    for i in 0..2i32.pow(d as u32) {
+        let mut rest = g;
+        let mut count = 0;
+        let mut deleted_idx = vec![];
+        for j in 0..d {
+            if 1 << j & i != 0 {
+                // 100(j+1) 点の問題を全部解く
+                rest -= 100 * (j + 1) * pc[j as usize].0 + pc[j as usize].1;
+                count += pc[j as usize].0;
+                deleted_idx.push(j);
+            }
+        }
 
-    let mut pc2 = pc.clone();
-
-    // ボーナスありでの1問あたりの点数によるソート
-    pc.sort_by_key(|x| OrdFloat(x.3));
-    // ボーナスなしでの1問あたりの点数によるソート（自明だけど..）
-    pc2.sort_by_key(|x| x.2);
-
-    debug!(pc);
-    debug!(pc2);
-
-    let mut rest: i32 = g;
-    let mut ans = 0;
-
-    while rest > 0 {
-        let &last = pc.last().unwrap();
-        let all_point = last.2 * last.0 + last.1;
-        if rest - all_point >= 0 {
-            rest -= all_point;
-            ans += last.0;
-            pc.pop();
-            pc2 = pc2.into_iter().filter(|x| x.2 != last.2).collect();
+        if rest <= 0 {
+            ans = min(ans, count);
             continue;
-        } else {
-            let last2 = pc2.pop().unwrap();
+        }
 
-            let num = if rest % last2.2 == 0 {
-                rest / last2.2
+        let exist: Vec<_> = pc
+            .iter()
+            .enumerate()
+            .filter(|&(x, _)| !deleted_idx.contains(&(x as i32)))
+            .map(|(x, &y)| (x, y.0, y.1))
+            .collect();
+
+        for &e in &exist {
+            let point_per_q = 100 * (e.0 as i32 + 1);
+            let num = if rest % point_per_q == 0 {
+                rest / point_per_q
             } else {
-                (rest / last2.2) + 1
+                (rest / point_per_q) + 1
             };
-
-            if num <= last2.0 {
-                ans += min(num, last.0);
-                break;
+            if num < e.1 {
+                ans = min(ans, count + num);
             } else {
-                rest -= last2.2 * last2.0 + last2.1;
-                ans += num;
-                pc = pc.into_iter().filter(|x| x.2 != last2.2).collect();
                 continue;
             }
         }
