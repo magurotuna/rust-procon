@@ -49,6 +49,33 @@ macro_rules! debug {
     }
 }
 
+fn dfs(cur_pos: usize, visited: Vec<usize>, link: &Vec<Vec<usize>>) -> i32 {
+    let mut count = 0;
+    let mut new_visited = visited.clone();
+    new_visited.push(cur_pos);
+
+    if new_visited.len() == link.len() {
+        return 1;
+    }
+
+    for &next in link[cur_pos].iter().filter(|&x| !new_visited.contains(x)) {
+        count += dfs(next, new_visited.clone(), link);
+    }
+
+    count
+}
+
 fn main() {
-    unimplemented!();
+    let (n, m) = read!(usize, usize);
+    let ab: Vec<(usize, usize)> = read!(usize, usize; m);
+
+    let mut nodes = vec![vec![]; n];
+    for i in 0..m {
+        let from = ab[i].0;
+        let to = ab[i].1;
+        nodes[from - 1].push(to - 1);
+        nodes[to - 1].push(from - 1);
+    }
+
+    println!("{}", dfs(0, vec![], &nodes));
 }
