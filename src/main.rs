@@ -50,5 +50,22 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (n, q) = read!(usize, usize);
+    let s: String = read!(String);
+    let lr: Vec<(usize, usize)> = read!(usize, usize; q);
+
+    let lr: Vec<_> = lr.into_iter().map(|x| (x.0 - 1, x.1 - 1)).collect();
+
+    let c: Vec<char> = s.chars().collect();
+
+    // dp[i] := 文字列Sの半開区間 [0, i) に'AC'が現れる回数
+    let mut dp = vec![0usize; n + 1];
+    for i in 2..(n + 1) {
+        dp[i] = if c[i - 2] == 'A' && c[i - 1] == 'C' {
+            dp[i - 1] + 1
+        } else {
+            dp[i - 1]
+        }
+    }
+    debug!(&dp);
 }
