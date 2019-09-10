@@ -58,7 +58,7 @@ fn main() {
 
     let c: Vec<char> = s.chars().collect();
 
-    // dp[i] := 文字列Sの半開区間 [0, i) に'AC'が現れる回数
+    // dp[i] := 文字列Sの半開区間 [0, i) に「左隣がAであるようなC」が現れる回数
     let mut dp = vec![0usize; n + 1];
     for i in 2..(n + 1) {
         dp[i] = if c[i - 2] == 'A' && c[i - 1] == 'C' {
@@ -67,5 +67,11 @@ fn main() {
             dp[i - 1]
         }
     }
-    debug!(&dp);
+
+    // lからr（両端含む）部分文字列は区間でいうと [l, r+1)
+    // この区間内にある'AC'の個数を数えるには、[l+1, r+1)にある「左隣がAであるようなC」をカウントすればよい
+    // つまり dp[r+1] - dp[l+1]
+    for &(l, r) in &lr {
+        println!("{}", dp[r + 1] - dp[l + 1]);
+    }
 }
