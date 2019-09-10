@@ -58,6 +58,7 @@ fn dfs(cur_pos: usize, visited: Vec<usize>, link: &Vec<Vec<usize>>) -> i32 {
         return 1;
     }
 
+    // [反省] このfilter処理を考えるとvisited管理はsetを使うべきだった
     for &next in link[cur_pos].iter().filter(|&x| !new_visited.contains(x)) {
         count += dfs(next, new_visited.clone(), link);
     }
