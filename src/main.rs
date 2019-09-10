@@ -50,5 +50,32 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let strings: Vec<String> = read!(String; n);
+
+    let mut cs: Vec<String> = strings
+        .into_iter()
+        .map(|s| {
+            let mut tmp: Vec<_> = s.chars().collect();
+            tmp.sort();
+            tmp.into_iter().collect()
+        })
+        .collect();
+    cs.sort();
+
+    let mut ans = 0u64;
+    let mut con_len = 1u64;
+    let mut prev = "";
+    for c in &cs {
+        if &prev == c {
+            con_len += 1;
+        } else {
+            prev = c;
+            ans += (con_len * (con_len - 1)) / 2;
+            con_len = 1;
+        }
+    }
+    ans += (con_len * (con_len - 1)) / 2;
+
+    println!("{}", ans);
 }
