@@ -49,6 +49,25 @@ macro_rules! debug {
     }
 }
 
+pub fn gcd(a: u64, b: u64) -> u64 {
+    if b == 0 {
+        a
+    } else {
+        gcd(b, a % b)
+    }
+}
+
+pub fn lcm(a: u64, b: u64) -> u64 {
+    a / gcd(a, b) * b
+}
+
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let t: Vec<u64> = read!(u64; n);
+
+    let mut ans = t[0];
+    for i in 0..(n - 1) {
+        ans = lcm(ans, t[i + 1]);
+    }
+    println!("{}", ans);
 }
