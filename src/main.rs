@@ -50,5 +50,31 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let s: String = read!(String);
+
+    let c = s.chars().collect::<Vec<char>>();
+
+    // 条件1
+    if c[0] != 'A' {
+        println!("WA");
+        return;
+    }
+
+    // 条件2
+    let r = c.get(2..(c.len() - 1)).unwrap();
+    if r.iter().filter(|&&x| x == 'C').count() != 1 {
+        println!("WA");
+        return;
+    }
+
+    // 条件3
+    let mut excluded = c
+        .iter()
+        .filter(|&&x| x != 'A' && x != 'C')
+        .map(|&x| x as u8);
+    if excluded.any(|x| x < 97 || 122 < x) {
+        println!("WA");
+        return;
+    }
+    println!("AC");
 }
