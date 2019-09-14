@@ -50,5 +50,35 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let a: Vec<i64> = read![[i64]];
+
+    let mut ans = 0;
+    let mut s = a[0];
+
+    for &ai in &a[1..] {
+        if s > 0 {
+            if s + ai < 0 {
+                s = s + ai;
+                continue;
+            } else {
+                // ai を s + ai = -1 になるように操作する
+                ans += ai + 1 + s;
+                s = -1;
+                continue;
+            }
+        } else {
+            if s + ai > 0 {
+                s = s + ai;
+                continue;
+            } else {
+                // ai を s + ai = 1 になるように操作する
+                ans += 1 - s - ai;
+                s = 1;
+                continue;
+            }
+        }
+    }
+
+    println!("{}", ans);
 }
