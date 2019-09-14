@@ -49,29 +49,68 @@ macro_rules! debug {
     }
 }
 
-fn dfs(links: &Vec<Vec<usize>>, cur: usize, visited: &mut HashSet<usize>, nodes: usize) -> bool {
-    visited.insert(cur);
+struct DisjointSet {
+    parent: Vec<usize>,
+    rank: Vec<usize>,
+}
 
-    //    debug!(&visited, cur, nodes);
-
-    if visited.len() == nodes {
-        return true;
-    }
-
-    let nexts = &links[cur];
-    let tmp_visited = visited.clone();
-    for &n in nexts.iter().filter(|&x| !tmp_visited.contains(x)) {
-        if dfs(links, n, visited, nodes) {
-            return true;
+impl DisjointSet {
+    fn new(n: usize) -> Self {
+        DisjointSet {
+            parent: (0..n).collect(),
+            rank: vec![0; n],
         }
     }
 
-    return false;
-}
+    fn find(&mut self, x: usize) -> Option<usize> {
+        if x > self.parent.len() {
+            None
+        } else if self.parent[x] == x {
+            Some(x)
+        } else {
+            let px = self.parent[x];
+            let root = self.find(px).unwrap();
+            self.parent[x] = root;
+            Some(root)
+        }
+    }
 
-fn is_linked(links: &Vec<Vec<usize>>, nodes: usize) -> bool {
-    let mut visited = HashSet::new();
-    return dfs(links, 0, &mut visited, nodes);
+    pub fn unite(&mut self, x: usize, y: usize) {
+        let x_root = match self.find(x) {
+            None => return,
+            Some(val) => val,
+        };
+        let y_root = match self.find(y) {
+            None => return,
+            Some(val) => val,
+        };
+
+        if x_root == y_root {
+            return;
+        }
+
+        if self.rank[x] < self.rank[y] {
+            self.parent[x_root] = y_root;
+        } else {
+            self.parent[y_root] = x_root;
+            if self.rank[x_root] == self.rank[y_root] {
+                self.rank[x_root] += 1;
+            }
+        }
+    }
+
+    pub fn same(&mut self, x: usize, y: usize) -> bool {
+        let x_root = match self.find(x) {
+            None => return false,
+            Some(val) => val,
+        };
+        let y_root = match self.find(y) {
+            None => return false,
+            Some(val) => val,
+        };
+
+        x_root == y_root
+    }
 }
 
 fn main() {
@@ -79,26 +118,27 @@ fn main() {
     let edges: Vec<(usize, usize)> = read![usize,usize; m];
     let edges: Vec<(usize, usize)> = edges.into_iter().map(|(x, y)| (x - 1, y - 1)).collect();
 
-    let mut link_count = 0;
+    let mut ans = 0;
 
-    for i in 0..(edges.len()) {
-        let mut links = vec![vec![]; n];
-
-        for (from, to) in edges
-            .iter()
-            .enumerate()
-            .filter(|&x| x.0 != i)
-            .map(|(_, &x)| x)
-        {
-            links[from].push(to);
-            links[to].push(from);
+    'loo: for i in 0..m {
+        let mut ds = DisjointSet::new(n);
+        // i本目の辺がないとしたらどうなるか
+        for (idx, &e) in edges.iter().enumerate() {
+            if idx == i {
+                continue;
+            }
+            ds.unite(e.0, e.1);
         }
 
-        // この隣接状態(i本目を切断)でもグラフが連結かどうかを判定する
-        if is_linked(&links, n) {
-            link_count += 1;
+        let root = ds.find(0);
+        for j in 1..n {
+            if ds.find(j) != root {
+                // この場合はグラフが連結ではないということ よってi本目の辺は橋だった
+                ans += 1;
+                continue 'loo;
+            }
         }
     }
 
-    println!("{}", edges.len() - link_count);
+    println!("{}", ans);
 }
