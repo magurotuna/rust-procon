@@ -53,32 +53,58 @@ fn main() {
     let n = read!(usize);
     let a: Vec<i64> = read![[i64]];
 
-    let mut ans = 0;
-    let mut s = a[0];
+    let mut ans_even = 0;
+    let mut ans_odd = 0;
+    let mut s_even = 0;
+    let mut s_odd = 0;
 
-    for &ai in &a[1..] {
-        if s > 0 {
-            if s + ai < 0 {
-                s = s + ai;
-                continue;
+    // 偶数番目を正にする場合
+    let mut even = true;
+    for &ai in &a {
+        let tmp = s_even + ai;
+        if even {
+            // 偶数
+            if tmp > 0 {
+                s_even = tmp;
             } else {
-                // ai を s + ai = -1 になるように操作する
-                ans += ai + 1 + s;
-                s = -1;
-                continue;
+                ans_even += 1 - tmp;
+                s_even = 1;
             }
         } else {
-            if s + ai > 0 {
-                s = s + ai;
-                continue;
+            // 奇数
+            if tmp < 0 {
+                s_even = tmp;
             } else {
-                // ai を s + ai = 1 になるように操作する
-                ans += 1 - s - ai;
-                s = 1;
-                continue;
+                ans_even += 1 + tmp;
+                s_even = -1;
             }
         }
+        even = !even;
     }
 
-    println!("{}", ans);
+    // 奇数番目を正にする場合
+    let mut odd = false;
+    for &ai in &a {
+        let tmp = s_odd + ai;
+        if odd {
+            // 奇数
+            if tmp > 0 {
+                s_odd = tmp;
+            } else {
+                ans_odd += 1 - tmp;
+                s_odd = 1;
+            }
+        } else {
+            // 偶数
+            if tmp < 0 {
+                s_odd = tmp;
+            } else {
+                ans_odd += 1 + tmp;
+                s_odd = -1;
+            }
+        }
+        odd = !odd;
+    }
+
+    println!("{}", min(ans_even, ans_odd));
 }
