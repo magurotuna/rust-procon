@@ -59,5 +59,15 @@ fn main() {
     // どの座標に置けばいちばん効率が良いかを考える
     // いったりきたり（ex. 12 -> 10 -> 14）するのは非効率なので、移動は一方向に行う
 
-    debug!(x);
+    // diff[i] := x[i+1] - x[i]
+    let mut diff = vec![0; m - 1];
+    for i in 0..(m - 1) {
+        diff[i] = x[i + 1] - x[i];
+    }
+
+    diff.sort();
+    diff.reverse();
+
+    let ans = x[m - 1] - x[0] - diff.into_iter().take(n - 1).sum::<i32>();
+    println!("{}", ans);
 }
