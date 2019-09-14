@@ -50,5 +50,14 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (n, m) = read!(usize, usize);
+    let mut x: Vec<i32> = read![[i32]];
+
+    x.sort();
+
+    // 最初に置くのはxのいずれかの座標である
+    // どの座標に置けばいちばん効率が良いかを考える
+    // いったりきたり（ex. 12 -> 10 -> 14）するのは非効率なので、移動は一方向に行う
+
+    debug!(x);
 }
