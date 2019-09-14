@@ -49,66 +49,37 @@ macro_rules! debug {
     }
 }
 
-pub trait Prime {
-    fn lower_primes(&self) -> Vec<usize>;
-    fn factorize(&self) -> HashMap<usize, usize>;
-}
-
-impl Prime for usize {
-    /// エラトステネスの篩を用いてself以下の素数を求める
-    fn lower_primes(&self) -> Vec<usize> {
-        let &this = self;
-        let mut v = Vec::new();
-        if this < 2 {
-            return v;
-        }
-        let mut deque = (2..(this + 1)).collect::<VecDeque<usize>>();
-
-        let mut p = match deque.pop_front() {
-            Some(x) => x,
-            None => return v,
-        };
-        v.push(p);
-        while p as f64 <= (this as f64).sqrt() {
-            deque = deque.iter().filter(|&&x| x % p != 0).map(|x| *x).collect();
-            p = match deque.pop_front() {
-                Some(x) => x,
-                None => return v,
-            };
-            v.push(p);
-        }
-        for n in deque {
-            v.push(n);
-        }
-        v
-    }
-
-    /// エラトステネスの篩を用いてselfを素因数分解する
-    fn factorize(&self) -> HashMap<usize, usize> {
-        let mut ret = HashMap::new();
-        let primes = ((*self as f64).sqrt() as usize).lower_primes();
-
-        let mut tmp = *self;
-        for prime in primes {
-            while tmp % prime == 0 {
-                tmp /= prime;
-                *ret.entry(prime).or_insert(0) += 1;
-            }
-        }
-        if tmp > 1 {
-            *ret.entry(tmp).or_insert(0) += 1;
-        }
-        ret
-    }
-}
-
 fn main() {
     let (n, m): (usize, usize) = read!(usize, usize);
+
+    if n == 1 {
+        println!("{}", m);
+        return;
+    }
 
     // a1, a2, ..., aNの公約数をDとすると、SUM(a)もDを約数にもつ。
     // よってMの正の約数のうちMではないものを大きい順から m1, m2, ..., 1として、
     // 順に「Mをm_iで割った余りが0 かつ 商がN以上」であるかどうかを検証していく
     // この条件を満たす最初のm_iが答えである
 
-    let hm = m.factorize();
+    let mut d = Vec::new(); // Mの約数リスト
+    let root_m = (m as f64).sqrt();
+    for i in 1..(root_m.floor() as usize) {
+        if m % i == 0 {
+            let q = m / i;
+            d.push(q);
+            d.push(i);
+        }
+    }
+    d.sort();
+    d.reverse();
+
+    let d_without_m = &d[1..];
+
+    for &e in d_without_m {
+        if m % e == 0 && m / e >= n {
+            println!("{}", e);
+            return;
+        }
+    }
 }
