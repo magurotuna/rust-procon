@@ -19,7 +19,8 @@ impl DisjointSet {
         } else if self.parent[x] == x {
             Some(x)
         } else {
-            let root = self.find(self.parent[x]).unwrap();
+            let px = self.parent[x];
+            let root = self.find(px).unwrap(); // AtCoderでのRustバージョンではpxを分離しないとだめ
             self.parent[x] = root;
             Some(root)
         }
