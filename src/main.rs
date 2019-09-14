@@ -49,22 +49,56 @@ macro_rules! debug {
     }
 }
 
+fn dfs(links: &Vec<Vec<usize>>, cur: usize, visited: &mut HashSet<usize>, nodes: usize) -> bool {
+    visited.insert(cur);
+
+    //    debug!(&visited, cur, nodes);
+
+    if visited.len() == nodes {
+        return true;
+    }
+
+    let nexts = &links[cur];
+    let tmp_visited = visited.clone();
+    for &n in nexts.iter().filter(|&x| !tmp_visited.contains(x)) {
+        if dfs(links, n, visited, nodes) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+fn is_linked(links: &Vec<Vec<usize>>, nodes: usize) -> bool {
+    let mut visited = HashSet::new();
+    return dfs(links, 0, &mut visited, nodes);
+}
+
 fn main() {
     let (n, m) = read!(usize, usize);
     let edges: Vec<(usize, usize)> = read![usize,usize; m];
     let edges: Vec<(usize, usize)> = edges.into_iter().map(|(x, y)| (x - 1, y - 1)).collect();
 
-    debug!(edges);
-    // 隣接行列を作成
-    let adj = vec![vec![false; n]; n]
-        .into_iter()
-        .enumerate()
-        .map(|(i, row)| {
-            row.into_iter()
-                .enumerate()
-                .map(|(j, _val)| edges.contains(&(i, j)) || edges.contains(&(j, i)))
-                .collect::<Vec<bool>>()
-        })
-        .collect::<Vec<Vec<bool>>>();
-    println!("{:?}", &adj);
+    let mut link_count = 0;
+
+    for i in 0..(edges.len()) {
+        let mut links = vec![vec![]; n];
+
+        for (from, to) in edges
+            .iter()
+            .enumerate()
+            .filter(|&x| x.0 != i)
+            .map(|(_, &x)| x)
+        {
+            links[from].push(to);
+            links[to].push(from);
+        }
+
+        // この隣接状態(i本目を切断)でもグラフが連結かどうかを判定する
+        if is_linked(&links, n) {
+            link_count += 1;
+        }
+    }
+
+    println!("{}", edges.len() - link_count);
 }
