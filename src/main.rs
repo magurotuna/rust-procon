@@ -50,5 +50,27 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (w, h, n) = read!(usize, usize, usize);
+    let xya: Vec<(usize, usize, usize)> = read!(usize, usize, usize; n);
+
+    let mut p1 = (0usize, 0usize);
+    let mut p2: (usize, usize) = (w, h);
+
+    for (x, y, a) in xya {
+        if a == 1 {
+            p1 = (max(p1.0, x), p1.1);
+        } else if a == 2 {
+            p2 = (min(p2.0, x), p2.1);
+        } else if a == 3 {
+            p1 = (p1.0, max(p1.1, y));
+        } else if a == 4 {
+            p2 = (p2.0, min(p2.1, y));
+        }
+    }
+
+    if p2.0 > p1.0 && p2.1 > p1.1 {
+        println!("{}", (p2.0 - p1.0) * (p2.1 - p1.1));
+    } else {
+        println!("0");
+    }
 }
