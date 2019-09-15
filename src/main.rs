@@ -50,5 +50,20 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let s: String = read!(String);
+    let c: Vec<char> = s.chars().collect();
+
+    // 最初は絶対引き分け（条件を満たすため）
+    // TopCoDeerがどういう戦略で来ようとも gpgpgpgp...とgpを交互に出すのが最善である
+    let mut point = 0;
+    for i in 0..c.len() {
+        if i % 2 == 0 {
+            // このときはgをだす
+            point += if c[i] == 'g' { 0 } else { -1 }
+        } else {
+            // pをだす
+            point += if c[i] == 'g' { 1 } else { 0 }
+        }
+    }
+    println!("{}", point);
 }
