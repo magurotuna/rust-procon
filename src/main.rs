@@ -50,5 +50,31 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (l, r) = read!(u64, u64);
+
+    // 区間[l,r]に2019の倍数が含まれていたら最小値は0
+    for x in l..(r + 1) {
+        if x % 2019 == 0 {
+            println!("0");
+            return;
+        }
+    }
+
+    let mod_l = l % 2019;
+    let mod_r = r % 2019;
+
+    // mod_l >= mod_r なら区間[l, r]には2019の倍数が含まれている
+    if mod_l >= mod_r {
+        println!("0");
+        return;
+    }
+
+    let mut ans = INF as u64;
+    // 全走査
+    for x in mod_l..(mod_r + 1) {
+        for y in (x + 1)..(mod_r + 1) {
+            ans = min(ans, (x * y) % 2019);
+        }
+    }
+    println!("{}", ans);
 }
