@@ -50,5 +50,32 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let a: Vec<usize> = read!(usize; n);
+
+    let mut sort_a = a.clone();
+    sort_a.sort();
+
+    // 数字jがインデックスiにある場合 pos[j] = i とする
+    let mut pos_orig = HashMap::new();
+    let mut pos_sort = HashMap::new();
+
+    for i in 0..n {
+        pos_orig.insert(a[i], i);
+        pos_sort.insert(sort_a[i], i);
+    }
+
+    let mut count = 0;
+    for v in &a {
+        // ソート後の位置とソート前の位置の差が偶数である場合は操作2の繰り返しにより移動可能
+        // 奇数である場合は操作2を繰り返したあと最後に1回だけ操作1をする必要がある
+        // そして「位置の差が奇数である」ような数字は必ず偶数個あり、この個数を2nとすると、操作1をおこなう回数はnとなる
+        if pos_orig.get(v).unwrap() % 2 == pos_sort.get(v).unwrap() % 2 {
+            continue;
+        } else {
+            count += 1;
+        }
+    }
+
+    println!("{}", count / 2);
 }
