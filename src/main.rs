@@ -50,5 +50,39 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n: usize = read!(usize);
+    let a: Vec<u64> = read![[u64]];
+
+    // 山iとi+1に降った雨量の和 s[i] (最後は山n-1と山0に降った雨量の和)
+    // 総雨量 total
+    let mut total = 0;
+    let mut s = vec![0; n];
+
+    for i in 0..n {
+        total += a[i];
+        s[i] = 2 * a[i];
+    }
+
+    let mut rain = Vec::with_capacity(n);
+
+    // 山0に降った雨量 = total - (s[1] + s[3] + ... + s[n-2])
+    let mut tmp = 0;
+    for i in 1..(n - 1) {
+        if i % 2 != 0 {
+            tmp += s[i];
+        }
+    }
+    rain.push(total - tmp);
+
+    for i in 1..n {
+        let prev_rain = rain[i - 1];
+        rain.push(s[i - 1] - prev_rain);
+    }
+
+    let st = rain
+        .into_iter()
+        .map(|x| x.to_string())
+        .collect::<Vec<_>>()
+        .join(" ");
+    println!("{}", st);
 }
