@@ -50,5 +50,15 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let b = read!(String);
+
+    if b == "A" {
+        println!("T");
+    } else if b == "C" {
+        println!("G");
+    } else if b == "G" {
+        println!("C");
+    } else {
+        println!("A");
+    }
 }
