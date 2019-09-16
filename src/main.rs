@@ -50,5 +50,19 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let s: String = read!(String);
+    let c = s.chars().collect::<Vec<_>>();
+
+    let mut ans = 0;
+    let mut tmp = 0;
+    for C in c {
+        if C == 'A' || C == 'C' || C == 'G' || C == 'T' {
+            tmp += 1;
+        } else {
+            ans = max(ans, tmp);
+            tmp = 0;
+        }
+    }
+    ans = max(ans, tmp);
+    println!("{}", ans);
 }
