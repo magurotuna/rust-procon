@@ -50,5 +50,29 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let s: String = read!(String);
+    let first = &s[0..2];
+    let second = &s[2..4];
+    let fi: i32 = first.parse().unwrap();
+    let si: i32 = second.parse().unwrap();
+
+    if 1 <= fi && fi <= 12 {
+        // MMYYの可能性あり
+        if 1 <= si && si <= 12 {
+            // どちらの可能性もあり
+            println!("AMBIGUOUS");
+        } else {
+            println!("MMYY");
+        }
+    } else if 1 <= si && si <= 12 {
+        // YYMMの可能性あり
+        if 1 <= fi && fi <= 12 {
+            println!("AMBIGUOUS");
+        } else {
+            println!("YYMM");
+        }
+    } else {
+        // どちらの可能性もない
+        println!("NA");
+    }
 }
