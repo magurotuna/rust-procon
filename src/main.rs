@@ -49,6 +49,25 @@ macro_rules! debug {
     }
 }
 
+fn a() {
+    let (n, a, b) = read!(usize, usize, usize);
+    println!("{}", min(n * a, b));
+}
+
+fn b() {
+    let s: String = read!(String);
+
+    let n: i32 = s.parse().unwrap();
+    let mut f = 0;
+    for c in s.chars() {
+        let d = c as i32 - 48;
+        f += d;
+    }
+
+    println!("{}", if n % f == 0 { "Yes" } else { "No" });
+}
+
 fn main() {
-    unimplemented!();
+    //    a();
+    b();
 }
