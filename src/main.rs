@@ -50,5 +50,8 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (a, p) = read!(i32, i32);
+
+    let parts: i32 = a * 3 + p;
+    println!("{}", parts / 2);
 }
