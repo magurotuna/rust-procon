@@ -50,5 +50,26 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (n, k) = read!(usize, usize);
+    let s: String = read!(String);
+    let sc: Vec<char> = s.chars().collect();
+
+    let ans: String = sc
+        .into_iter()
+        .enumerate()
+        .map(|(i, x)| {
+            if i + 1 == k {
+                if x == 'A' {
+                    'a'
+                } else if x == 'B' {
+                    'b'
+                } else {
+                    'c'
+                }
+            } else {
+                x
+            }
+        })
+        .collect();
+    println!("{}", ans);
 }
