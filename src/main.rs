@@ -57,8 +57,8 @@ fn main() {
         return;
     }
 
-    if x * y >= 0 {
-        // x, yの符号が同じ場合（どちらかが0である場合も含む）
+    if x * y > 0 {
+        // x, yの符号が同じ場合
         if x < y {
             println!("{}", y - x);
             return;
@@ -66,7 +66,7 @@ fn main() {
             println!("{}", x - y + 2);
             return;
         }
-    } else {
+    } else if x * y < 0 {
         // x, yの符号が違う場合
         if x > 0 {
             // xが正、yが負
@@ -85,6 +85,25 @@ fn main() {
                 return;
             } else {
                 println!("{}", 1 + x + y);
+                return;
+            }
+        }
+    } else {
+        // x, y のどちらかが0の場合
+        if x == 0 {
+            if y > 0 {
+                println!("{}", y - x);
+                return;
+            } else {
+                println!("{}", 1 - y);
+                return;
+            }
+        } else {
+            if x > 0 {
+                println!("{}", 1 + x);
+                return;
+            } else {
+                println!("{}", -x);
                 return;
             }
         }
