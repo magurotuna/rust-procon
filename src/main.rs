@@ -50,5 +50,41 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let s: String = read!(String);
+    let t = read!(usize);
+
+    let sc: Vec<char> = s.chars().collect();
+
+    let mut hm = HashMap::new();
+    hm.insert('L', 0i32);
+    hm.insert('R', 0i32);
+    hm.insert('U', 0i32);
+    hm.insert('D', 0i32);
+    hm.insert('?', 0i32);
+    for c in sc {
+        *hm.entry(c).or_insert(0) += 1;
+    }
+
+    let pos = (
+        *hm.get(&'R').unwrap() - *hm.get(&'L').unwrap(),
+        *hm.get(&'U').unwrap() - *hm.get(&'D').unwrap(),
+    );
+
+    let ques = *hm.get(&'?').unwrap();
+
+    if t == 1 {
+        // ?をうまく調整することで絶対に距離を伸ばすことができるから、?の数だけ加算する
+        println!("{}", pos.0.abs() + pos.1.abs() + ques);
+    } else {
+        // 原点より近い点はないことに注意が必要
+        let tmp = pos.0.abs() + pos.1.abs() - ques;
+        if tmp < 0 {
+            // まず?を使って原点に戻る 戻ったあとquesが何個残っているか
+            let rest_ques = ques - pos.0.abs() - pos.1.abs();
+            // 残っているquesが偶数ならウロウロすることで原点に戻ってこれるが、奇数ならがんばっても最後には距離1のところにいってしまう
+            println!("{}", if rest_ques % 2 == 0 { 0 } else { 1 })
+        } else {
+            println!("{}", tmp);
+        }
+    }
 }
