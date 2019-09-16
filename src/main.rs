@@ -50,5 +50,13 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (a, b) = read!(usize, usize);
+
+    if a >= 13 {
+        println!("{}", b);
+    } else if a >= 6 {
+        println!("{}", b / 2);
+    } else {
+        println!("0");
+    }
 }
