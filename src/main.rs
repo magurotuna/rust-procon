@@ -50,5 +50,43 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (x, y) = read!(i64, i64);
+
+    if x == y {
+        println!("0");
+        return;
+    }
+
+    if x * y >= 0 {
+        // x, yの符号が同じ場合（どちらかが0である場合も含む）
+        if x < y {
+            println!("{}", y - x);
+            return;
+        } else {
+            println!("{}", x - y + 2);
+            return;
+        }
+    } else {
+        // x, yの符号が違う場合
+        if x > 0 {
+            // xが正、yが負
+            // |x| と |y| の大小で場合分けが生じる
+            if x.abs() >= y.abs() {
+                println!("{}", 1 + x + y);
+                return;
+            } else {
+                println!("{}", 1 - x - y);
+                return;
+            }
+        } else {
+            // xが負、yが正
+            if x.abs() >= y.abs() {
+                println!("{}", 1 - x - y);
+                return;
+            } else {
+                println!("{}", 1 + x + y);
+                return;
+            }
+        }
+    }
 }
