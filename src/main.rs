@@ -50,5 +50,16 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (a, b): (usize, usize) = read!(usize, usize);
+
+    let mut ans = 0;
+    for x in a..(b + 1) {
+        let s = x.to_string().chars().collect::<Vec<char>>();
+        let mut s_cp = s.clone();
+        s_cp.reverse();
+        if s.into_iter().collect::<String>() == s_cp.into_iter().collect::<String>() {
+            ans += 1;
+        }
+    }
+    println!("{}", ans);
 }
