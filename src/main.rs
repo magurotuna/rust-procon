@@ -50,5 +50,38 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (n, k): (usize, usize) = read!(usize, usize);
+    let a: Vec<usize> = read![[usize]];
+
+    if k == n {
+        println!("1");
+        return;
+    }
+
+    // 以下 k < n とする
+
+    let one_pos = a.iter().position(|&x| x == 1).unwrap();
+    let mut one_range = (one_pos, one_pos + 1);
+
+    // 1を区間の端に含むような幅kの区間を選んでいけば最小になる
+
+    let mut ans = 0;
+
+    while one_range.0 != 0 || one_range.1 != n {
+        let left_len = match one_range.0.checked_sub(k - 1) {
+            Some(v) => k,
+            None => one_range.0 + 1,
+        };
+        let right_len = match one_range.1 - 1 + k {
+            v if v > n => n - (one_range.1 - 1),
+            _ => k,
+        };
+        if left_len >= right_len {
+            one_range.0 = one_range.0 + 1 - left_len;
+        } else {
+            one_range.1 = one_range.1 + right_len - 1;
+        }
+        ans += 1;
+    }
+    println!("{}", ans)
 }
