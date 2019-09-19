@@ -50,5 +50,8 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (a, b, c) = read!(i32, i32, i32);
+    let after_a = min(a, b + c);
+    let b_to_a = after_a - b;
+    println!("{}", c - b_to_a);
 }
