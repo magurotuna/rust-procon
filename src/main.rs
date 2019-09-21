@@ -54,7 +54,7 @@ fn main() {
     let sc: Vec<char> = s.chars().collect();
 
     let mut cnt_a = 0;
-    let mut ans = 0;
+    let mut ans = 0i64; // なぜかi64などの64ビット型にしないと通らない
     let mut i = 0;
     while i < sc.len() - 1 {
         if sc[i] == 'A' {
