@@ -50,11 +50,57 @@ macro_rules! debug {
 }
 
 fn a() {
-    unimplemented!();
+    let (h, w, a, b) = read!(usize, usize, usize, usize);
+
+    let mut left1 = Vec::new();
+    let mut right1 = Vec::new();
+    for i in 1..(w + 1) {
+        if i <= a {
+            left1.push("1");
+            right1.push("0");
+        } else {
+            left1.push("0");
+            right1.push("1");
+        }
+    }
+
+    //    let mut ans = Vec::new();
+    //
+    let sl = left1.join("");
+    let sr = right1.join("");
+    for i in 1..(h + 1) {
+        if i <= b {
+            //            ans.push(sl.chars().collect::<Vec<char>>());
+            println!("{}", &sl);
+        } else {
+            //            ans.push(sr.chars().collect::<Vec<char>>());
+            println!("{}", &sr);
+        }
+    }
 }
 
 fn b() {
-    unimplemented!();
+    let (n, k) = read!(usize, usize);
+    let p: Vec<usize> = read![[usize]];
+
+    // 連続k要素の選び方はn+1-k通りなので答えは高々n+1-k
+    // dp[i][j] := i番目からj番目までが昇順に並んでいるか否か
+    let mut dp = vec![vec![false; n]; n];
+    for i in 0..n {
+        dp[i][i] = true;
+    }
+    let mut start = 0;
+    for x in 1..n {
+        if p[x] > p[x - 1] {
+            for pos in start..x {
+                dp[pos][x] = true;
+            }
+        } else {
+            start = x;
+        }
+    }
+
+    for i in 0..n {}
 }
 
 fn c() {
@@ -74,5 +120,5 @@ fn f() {
 }
 
 fn main() {
-    a();
+    b();
 }
