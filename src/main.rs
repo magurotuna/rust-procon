@@ -50,5 +50,23 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let s: String = read!(String);
+    let sc: Vec<char> = s.chars().collect();
+
+    let mut cnt_a = 0;
+    let mut ans = 0;
+    let mut i = 0;
+    while i < sc.len() - 1 {
+        if sc[i] == 'A' {
+            cnt_a += 1;
+            i += 1;
+        } else if sc[i] == 'B' && sc[i + 1] == 'C' {
+            ans += cnt_a;
+            i += 2;
+        } else {
+            cnt_a = 0;
+            i += 1;
+        }
+    }
+    println!("{}", ans);
 }
