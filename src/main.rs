@@ -50,5 +50,61 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (n, x): (usize, usize) = read!(usize, usize);
+
+    let mut l = Vec::with_capacity(n + 1); // レベルiバーガーの層の数
+    let mut p = Vec::with_capacity(n + 1); // レベルiバーガーのパティの数
+    l.push(1usize);
+    p.push(1usize);
+    for i in 1..(n + 1) {
+        let l_prev = l[i - 1];
+        let p_prev = p[i - 1];
+        l.push(l_prev * 2 + 3);
+        p.push(p_prev * 2 + 1);
+    }
+
+    let mut ans = 0usize;
+    let mut i = 0usize;
+    let mut i_in_d = 0usize;
+    let mut cur_level = n;
+    while i < x {
+        if i_in_d == 0 {
+            // レベルcur_levelバーガーの一番下を見ているとき
+            if cur_level == 0 {
+                i_in_d = 0;
+                i += 1;
+                ans += 1;
+                continue;
+            } else {
+                i_in_d += 1;
+                i += 1;
+                continue;
+            }
+        }
+        if i_in_d == l[cur_level - 1] + 1 {
+            // レベルcur_levelバーガーの中央にあるパティを見ているとき
+            i_in_d += 1;
+            i += 1;
+            ans += 1;
+            continue;
+        }
+        if i_in_d == l[cur_level - 1] * 2 + 2 {
+            // レベルcur_levelバーガーの一番上を見ているとき
+            i_in_d += 1;
+            i += 1;
+            continue;
+        }
+        if i + l[cur_level - 1] < x {
+            // レベルcur_level - 1バーガーを全部食べても大丈夫なとき
+            i_in_d += l[cur_level - 1];
+            i += l[cur_level - 1];
+            ans += p[cur_level - 1];
+            continue;
+        }
+
+        // レベルcur_level - 1バーガーを全部食べることができない場合
+        i_in_d = 0;
+        cur_level -= 1;
+    }
+    println!("{}", ans);
 }
