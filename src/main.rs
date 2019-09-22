@@ -50,5 +50,33 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let n: usize = read!(usize);
+    let mut a: Vec<usize> = read![[usize]];
+
+    a.sort();
+    let mut s = Vec::with_capacity(n);
+    s.push(a[0]);
+    for i in 1..n {
+        let prev_s = s[i - 1];
+        s.push(prev_s + a[i]);
+    }
+
+    let mut a_rev = a.clone();
+    a_rev.reverse();
+
+    let mut ans = 1; // 一番大きい大きさをもつ生物は必ず最後まで残ることが可能
+
+    for i in 1..n {
+        // i番目(0-based)に大きい生物が最後まで残る可能性があるのは、この生物よりも小さい生物を全部合体した状況で、自分より1つ大きいやつを食えるかどうかで決まる
+        if i == n - 1 {
+            if a_rev[i] * 2 >= a_rev[i - 1] {
+                ans += 1;
+            }
+        } else if (a_rev[i] + s[n - i - 2]) * 2 >= a_rev[i - 1] {
+            ans += 1;
+        } else {
+            break;
+        }
+    }
+    println!("{}", ans);
 }
