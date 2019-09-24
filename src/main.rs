@@ -50,5 +50,12 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let r = read!(usize);
+    if r < 1200 {
+        println!("ABC");
+    } else if r < 2800 {
+        println!("ARC");
+    } else {
+        println!("AGC");
+    }
 }
