@@ -50,5 +50,12 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let c1 = read!(String);
+    let c2 = read!(String);
+    let c3 = read!(String);
+
+    let c1 = c1.chars().collect::<Vec<_>>();
+    let c2 = c2.chars().collect::<Vec<_>>();
+    let c3 = c3.chars().collect::<Vec<_>>();
+    println!("{}{}{}", c1[0], c2[1], c3[2]);
 }
