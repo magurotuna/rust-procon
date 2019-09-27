@@ -8,7 +8,6 @@ use std::cell::{Cell, Ref, RefCell, RefMut};
 use std::cmp::{max, min, Ordering};
 use std::collections::*;
 use std::fmt::{Debug, Formatter, Write as FmtWrite};
-use std::intrinsics::uninit;
 use std::io::{stderr, stdin, BufRead, Write};
 use std::mem::{replace, swap};
 use std::ops::*;
