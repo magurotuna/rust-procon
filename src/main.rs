@@ -50,5 +50,15 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let s = read!(String);
+    let c = s.chars().collect::<Vec<char>>();
+    let mut ans = 0;
+    for cc in c {
+        if cc == '+' {
+            ans += 1;
+        } else {
+            ans -= 1;
+        }
+    }
+    println!("{}", ans);
 }
