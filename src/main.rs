@@ -50,5 +50,20 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let x: u64 = read!(u64);
+
+    // 6 -> 5 -> 6 -> 5 ... と繰り返していけばよい
+    // 6 -> 5 の2回をまとめて1セットと数え、何セットできるかをとりあえず数える
+    let d = x / 11;
+    let r = x % 11;
+
+    let ans = if 1 <= r && r <= 6 {
+        2 * d + 1
+    } else if r == 0 {
+        2 * d
+    } else {
+        2 * d + 2
+    };
+
+    println!("{}", ans);
 }
