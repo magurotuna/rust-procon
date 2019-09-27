@@ -49,6 +49,63 @@ macro_rules! debug {
     }
 }
 
+pub trait CharToNum {
+    fn to_i32(&self) -> i32;
+    fn to_i64(&self) -> i64;
+    fn to_u64(&self) -> u64;
+    fn to_usize(&self) -> usize;
+}
+
+impl CharToNum for char {
+    /// 1, 2, 3, ... の数字の文字型をもとにi32を返す
+    fn to_i32(&self) -> i32 {
+        *self as i32 - 48
+    }
+
+    /// 1, 2, 3, ... の数字の文字型をもとにi64を返す
+    fn to_i64(&self) -> i64 {
+        *self as i64 - 48
+    }
+
+    /// 1, 2, 3, ... の数字の文字型をもとにi64を返す
+    fn to_u64(&self) -> u64 {
+        *self as u64 - 48
+    }
+
+    /// 1, 2, 3, ... の数字の文字型をもとにusizeを返す
+    fn to_usize(&self) -> usize {
+        *self as usize - 48
+    }
+}
+
 fn main() {
-    unimplemented!();
+    let s = read!(String);
+    let sc: Vec<char> = s.chars().collect::<Vec<char>>();
+    let num = sc.iter().map(|&x| x.to_i32()).collect::<Vec<_>>();
+
+    for i in 0..2usize.pow(3) {
+        let mut ops = vec![];
+        for j in 0..3 {
+            if 1 << j & i != 0 {
+                ops.push('+');
+            } else {
+                ops.push('-');
+            }
+        }
+        let mut s = num[0];
+        for k in 0..ops.len() {
+            if ops[k] == '+' {
+                s += num[k + 1];
+            } else {
+                s -= num[k + 1];
+            }
+        }
+        if s == 7 {
+            println!(
+                "{}{}{}{}{}{}{}=7",
+                num[0], ops[0], num[1], ops[1], num[2], ops[2], num[3]
+            );
+            return;
+        }
+    }
 }
