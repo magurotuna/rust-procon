@@ -8,7 +8,6 @@ use std::cell::{Cell, Ref, RefCell, RefMut};
 use std::cmp::{max, min, Ordering};
 use std::collections::*;
 use std::fmt::{Debug, Formatter, Write as FmtWrite};
-use std::intrinsics::uninit;
 use std::io::{stderr, stdin, BufRead, Write};
 use std::mem::{replace, swap};
 use std::ops::*;
@@ -50,6 +49,44 @@ macro_rules! debug {
     }
 }
 
+fn warchall_floyd(vertex: usize, cost: &mut Vec<Vec<usize>>) {
+    for k in 0..vertex {
+        for j in 0..vertex {
+            for i in 0..vertex {
+                let ij = cost[i][j];
+                let ik = cost[i][k];
+                let kj = cost[k][j];
+                cost[i][j] = min(ij, ik + kj);
+            }
+        }
+    }
+}
+
 fn main() {
-    unimplemented!();
+    let (h, w) = read!(usize, usize);
+    let mut c = vec![];
+    for i in 0..10 {
+        let t: Vec<usize> = read![[usize]];
+        c.push(t);
+    }
+    let mut a = Vec::with_capacity(h);
+    for i in 0..h {
+        let t: Vec<i32> = read![[i32]];
+        a.push(t);
+    }
+
+    warchall_floyd(10, &mut c);
+
+    let mut cost = 0;
+
+    for i in 0..h {
+        for j in 0..w {
+            if a[i][j] == -1 || a[i][j] == 1 {
+                continue;
+            }
+            cost += c[a[i][j] as usize][1];
+        }
+    }
+
+    println!("{}", cost);
 }
