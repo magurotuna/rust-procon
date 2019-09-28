@@ -62,15 +62,35 @@ fn main() {
         color.push(t);
     }
 
-    //    debug!(&d);
-    //    debug!(&color);
-
     // 行と列の和をkとする。kを3で割った余りでグループ分けし、グループ0, 1, 2とする。
     // 各グループをどの色で塗ることにすれば一番違和感が小さくなるのかを考える。
 
-    // 全部の塗り方を調べる TLEしそう（10^8くらいな気がする…）
     // グループ0の塗り方c0, 以下順にc1, c2とする
     let mut min_diff = INF as usize;
+
+    // g0, g1, g2 それぞれで元の色iが何個あるのかをあらかじめ数えておくことで計算量減らせないかな？
+    let mut g0_map = HashMap::new();
+    let mut g1_map = HashMap::new();
+    let mut g2_map = HashMap::new();
+    for i in 0..n {
+        for k in 0..n {
+            let ii = i + 1;
+            let kk = k + 1;
+            match (ii + kk) % 3 {
+                0 => {
+                    *g0_map.entry(color[i][k] - 1).or_insert(0) += 1;
+                }
+                1 => {
+                    *g1_map.entry(color[i][k] - 1).or_insert(0) += 1;
+                }
+                2 => {
+                    *g2_map.entry(color[i][k] - 1).or_insert(0) += 1;
+                }
+                _ => (),
+            };
+        }
+    }
+
     for c0 in 0..c {
         for c1 in 0..c {
             for c2 in 0..c {
@@ -80,18 +100,14 @@ fn main() {
                 let mut g0_diff = 0;
                 let mut g1_diff = 0;
                 let mut g2_diff = 0;
-                for i in 0..n {
-                    for k in 0..n {
-                        //                        debug!(c0, c1, c2, i, k);
-                        let ii = i + 1;
-                        let kk = k + 1;
-                        match (ii + kk) % 3 {
-                            0 => g0_diff += d[color[i][k] - 1][c0],
-                            1 => g1_diff += d[color[i][k] - 1][c1],
-                            2 => g2_diff += d[color[i][k] - 1][c2],
-                            _ => (),
-                        };
-                    }
+                for (&cc, &num) in &g0_map {
+                    g0_diff += d[cc][c0] * num;
+                }
+                for (&cc, &num) in &g1_map {
+                    g1_diff += d[cc][c1] * num;
+                }
+                for (&cc, &num) in &g2_map {
+                    g2_diff += d[cc][c2] * num;
                 }
                 min_diff = min(min_diff, g0_diff + g1_diff + g2_diff);
             }
