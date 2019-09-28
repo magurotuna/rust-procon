@@ -56,6 +56,7 @@ fn a() {
 
     if N == 1 {
         println!("{}", 1.0);
+        return;
     }
 
     if N % 2 == 0 {
@@ -190,5 +191,5 @@ fn f() {
 }
 
 fn main() {
-    e();
+    a();
 }
