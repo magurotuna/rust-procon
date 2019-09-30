@@ -50,5 +50,11 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let a = read!(usize);
+    let s = read!(String);
+    if a >= 3200 {
+        println!("{}", s);
+    } else {
+        println!("red");
+    }
 }
