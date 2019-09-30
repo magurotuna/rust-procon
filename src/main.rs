@@ -50,5 +50,13 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let (a, b) = read!(usize, usize);
+    let ab = a * b;
+    if ab % 2 == 1 {
+        println!("Yes");
+    } else if (ab * 3) % 2 == 1 {
+        println!("Yes");
+    } else {
+        println!("No");
+    }
 }
