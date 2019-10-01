@@ -50,5 +50,19 @@ macro_rules! debug {
 }
 
 fn main() {
-    unimplemented!();
+    let s: String = read!(String);
+    let c: Vec<_> = s.chars().collect();
+
+    let mut ans = 1 << 30;
+    for i in 0..(c.len() - 2) {
+        let x = c
+            .get(i..(i + 3))
+            .unwrap()
+            .iter()
+            .map(|&y| y)
+            .collect::<String>();
+        let x: i32 = x.parse().unwrap();
+        ans = min(ans, (x - 753).abs());
+    }
+    println!("{}", ans);
 }
