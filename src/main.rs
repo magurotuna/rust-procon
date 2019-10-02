@@ -44,9 +44,12 @@ fn rl() -> String {
 
 #[allow(unused_macros)]
 macro_rules! debug {
-    ($($a:expr),*) => {
-        eprintln!(concat!($(stringify!($a), " = {:?}, "),*), $($a),*);
-    }
+    ($($format:tt)*) => (write!(std::io::stderr(), $($format)*).unwrap());
+}
+
+#[allow(unused_macros)]
+macro_rules! debugln {
+    ($($format:tt)*) => (writeln!(std::io::stderr(), $($format)*).unwrap());
 }
 
 fn main() {
