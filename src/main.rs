@@ -53,5 +53,20 @@ macro_rules! debugln {
 }
 
 fn main() {
-    unimplemented!();
+    let n: usize = read!(usize);
+
+    let mut lucas = Vec::with_capacity(n + 1);
+    lucas.push(2usize);
+    lucas.push(1);
+    if n == 1 {
+        println!("1");
+        return;
+    }
+    for i in 2..(n + 1) {
+        let p1 = lucas[i - 1];
+        let p2 = lucas[i - 2];
+        lucas.push(p1 + p2);
+    }
+
+    println!("{}", lucas[n]);
 }
