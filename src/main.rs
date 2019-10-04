@@ -53,5 +53,10 @@ macro_rules! debugln {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    if n <= 999 {
+        println!("ABC");
+    } else {
+        println!("ABD");
+    }
 }
