@@ -53,5 +53,18 @@ macro_rules! debugln {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let h: Vec<i32> = read![[i32]];
+
+    let mut dp = vec![0; n];
+    dp[0] = 0;
+    dp[1] = (h[0] - h[1]).abs();
+
+    for i in 2..n {
+        let prev2 = dp[i - 2] + (h[i - 2] - h[i]).abs();
+        let prev1 = dp[i - 1] + (h[i - 1] - h[i]).abs();
+        dp[i] = min(prev1, prev2);
+    }
+
+    println!("{}", dp[n - 1]);
 }
