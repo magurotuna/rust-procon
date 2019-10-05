@@ -53,17 +53,26 @@ macro_rules! debugln {
 }
 
 fn main() {
-    let n = read!(usize);
+    let (n, k) = read!(usize, usize);
     let h: Vec<i32> = read![[i32]];
 
     let mut dp = vec![0; n];
     dp[0] = 0;
-    dp[1] = (h[0] - h[1]).abs();
 
-    for i in 2..n {
-        let prev2 = dp[i - 2] + (h[i - 2] - h[i]).abs();
-        let prev1 = dp[i - 1] + (h[i - 1] - h[i]).abs();
-        dp[i] = min(prev1, prev2);
+    for i in 1..n {
+        let mut min_cost = 1 << 30;
+        for j in 1..(k + 1) {
+            // 足場iに i - j から飛んでくるとき
+            if i < j {
+                break;
+            }
+            let cost_ij = match dp.get(i - j) {
+                Some(&a) => a,
+                None => break,
+            };
+            min_cost = min(min_cost, cost_ij + (h[i - j] - h[i]).abs());
+        }
+        dp[i] = min_cost;
     }
 
     println!("{}", dp[n - 1]);
