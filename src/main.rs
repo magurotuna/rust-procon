@@ -53,27 +53,22 @@ macro_rules! debugln {
 }
 
 fn main() {
-    let (n, k) = read!(usize, usize);
-    let h: Vec<i32> = read![[i32]];
+    let n = read!(usize);
+    let abc: Vec<(usize, usize, usize)> = read!(usize, usize, usize; n);
 
-    let mut dp = vec![0; n];
-    dp[0] = 0;
+    // dp[i][j(=0, 1, 2)] := i日目にjという活動をおこなった場合の最大幸福度
+    let mut dp = vec![vec![0; 3]; n];
+
+    dp[0][0] = abc[0].0;
+    dp[0][1] = abc[0].1;
+    dp[0][2] = abc[0].2;
 
     for i in 1..n {
-        let mut min_cost = 1 << 30;
-        for j in 1..(k + 1) {
-            // 足場iに i - j から飛んでくるとき
-            if i < j {
-                break;
-            }
-            let cost_ij = match dp.get(i - j) {
-                Some(&a) => a,
-                None => break,
-            };
-            min_cost = min(min_cost, cost_ij + (h[i - j] - h[i]).abs());
-        }
-        dp[i] = min_cost;
+        dp[i][0] = max(dp[i - 1][1] + abc[i].0, dp[i - 1][2] + abc[i].0);
+        dp[i][1] = max(dp[i - 1][0] + abc[i].1, dp[i - 1][2] + abc[i].1);
+        dp[i][2] = max(dp[i - 1][1] + abc[i].2, dp[i - 1][0] + abc[i].2);
     }
 
-    println!("{}", dp[n - 1]);
+    let ans = max(dp[n - 1][0], max(dp[n - 1][1], dp[n - 1][2]));
+    println!("{}", ans);
 }
