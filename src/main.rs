@@ -53,5 +53,13 @@ macro_rules! debugln {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let a: Vec<f64> = read![[f64]];
+
+    let mut x = 0.0;
+    for aa in a {
+        x += 1.0 / aa;
+    }
+
+    println!("{}", 1.0 / x);
 }
