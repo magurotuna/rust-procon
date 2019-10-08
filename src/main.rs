@@ -53,5 +53,19 @@ macro_rules! debugln {
 }
 
 fn main() {
-    unimplemented!();
+    let (a, b) = read!(i32, i32);
+
+    let mut west = 1;
+    let mut east = 3;
+    let mut diff = 2;
+
+    loop {
+        if west - a == east - b {
+            println!("{}", west - a);
+            return;
+        }
+        west = east;
+        east = east + diff + 1;
+        diff += 1;
+    }
 }
