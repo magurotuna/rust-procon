@@ -52,6 +52,38 @@ macro_rules! debugln {
     ($($format:tt)*) => (writeln!(std::io::stderr(), $($format)*).unwrap());
 }
 
+#[derive(PartialEq, PartialOrd, Debug)]
+pub struct OrdFloat<T>(pub T);
+
+impl<T: PartialEq> Eq for OrdFloat<T> {}
+
+impl<T: PartialOrd> Ord for OrdFloat<T> {
+    fn cmp(&self, other: &OrdFloat<T>) -> Ordering {
+        self.0.partial_cmp(&other.0).unwrap()
+    }
+}
+
 fn main() {
-    unimplemented!();
+    let n = read!(i32);
+    let v: Vec<f32> = read![[f32]];
+
+    let mut bh = BinaryHeap::new();
+    for vv in v {
+        bh.push(OrdFloat(-1.0 * vv));
+    }
+
+    for i in 0..(n - 1) {
+        let o = -1.0;
+        let OrdFloat(x) = bh.pop().unwrap();
+        let x = o * x;
+        let OrdFloat(y) = bh.pop().unwrap();
+        let y = o * y;
+
+        let t = (x + y) / 2.0;
+
+        bh.push(OrdFloat(o * t));
+    }
+
+    let OrdFloat(ans) = bh.pop().unwrap();
+    println!("{}", -1.0 * ans);
 }
