@@ -53,5 +53,6 @@ macro_rules! debugln {
 }
 
 fn main() {
-    unimplemented!();
+    let (a, b): (f32, f32) = read!(f32, f32);
+    println!("{}", ((a + b) / 2.0).ceil());
 }
