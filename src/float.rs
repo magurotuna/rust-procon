@@ -2,7 +2,7 @@
 
 use std::cmp::Ordering;
 
-#[derive(PartialEq, PartialOrd)]
+#[derive(PartialEq, PartialOrd, Debug)]
 pub struct OrdFloat<T>(pub T);
 
 impl<T: PartialEq> Eq for OrdFloat<T> {}
