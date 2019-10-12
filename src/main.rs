@@ -52,6 +52,29 @@ macro_rules! debugln {
     ($($format:tt)*) => (writeln!(std::io::stderr(), $($format)*).unwrap());
 }
 
+pub fn gcd(a: u64, b: u64) -> u64 {
+    if b == 0 {
+        a
+    } else {
+        gcd(b, a % b)
+    }
+}
+
 fn main() {
-    unimplemented!();
+    let (n, start) = read!(usize, i32);
+    let x: Vec<i32> = read![[i32]];
+
+    let x = x
+        .into_iter()
+        .map(|y| match y - start {
+            t if t >= 0 => t as u64,
+            t => (-1 * t) as u64,
+        })
+        .collect::<Vec<_>>();
+
+    let mut ans = x[0];
+    for xx in x {
+        ans = gcd(ans, xx);
+    }
+    println!("{}", ans);
 }
