@@ -53,20 +53,5 @@ macro_rules! debugln {
 }
 
 fn main() {
-    let n = read!(usize);
-    let mut a: Vec<usize> = read![[usize]];
-    a.sort();
-    a.reverse();
-    let mut alice = 0;
-    let mut bob = 0;
-
-    for i in 0..n {
-        if i % 2 == 0 {
-            alice += a[i];
-        } else {
-            bob += a[i];
-        }
-    }
-
-    println!("{}", alice - bob);
+    unimplemented!();
 }
