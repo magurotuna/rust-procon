@@ -53,5 +53,23 @@ macro_rules! debugln {
 }
 
 fn main() {
-    unimplemented!();
+    let mut c: Vec<Vec<i32>> = vec![];
+    for _ in 0..3 {
+        c.push(read![[i32]]);
+    }
+
+    let mut ans = true;
+
+    for i in 0..3 {
+        let j = (i + 1) % 3;
+        let col = c[i][0] - c[j][0];
+        let row = c[0][i] - c[0][j];
+
+        for k in 0..3 {
+            if col != c[i][k] - c[j][k] || row != c[k][i] - c[k][j] {
+                ans = false;
+            }
+        }
+    }
+    println!("{}", if ans { "Yes" } else { "No" });
 }
