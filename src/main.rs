@@ -53,5 +53,20 @@ macro_rules! debugln {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(usize);
+    let mut h: Vec<usize> = read![[usize]];
+
+    for i in 1..n {
+        if h[i - 1] == h[i] {
+            continue;
+        } else if h[i - 1] + 1 <= h[i] {
+            let t = h[i];
+            h[i] = t - 1;
+            continue;
+        } else {
+            println!("No");
+            return;
+        }
+    }
+    println!("Yes");
 }
