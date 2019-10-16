@@ -53,5 +53,6 @@ macro_rules! debugln {
 }
 
 fn main() {
-    unimplemented!();
+    let (a, b) = read!(i32, i32);
+    println!("{}", max(a + b, max(a - b, a * b)));
 }
