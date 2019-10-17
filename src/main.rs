@@ -53,5 +53,6 @@ macro_rules! debugln {
 }
 
 fn main() {
-    unimplemented!();
+    let (x, y) = read!(usize, usize);
+    println!("{}", x + y / 2);
 }
