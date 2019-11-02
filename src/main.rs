@@ -7,6 +7,7 @@
 use std::cell::{Cell, Ref, RefCell, RefMut};
 use std::cmp::{max, min, Ordering};
 use std::collections::*;
+use std::f64::consts::PI;
 use std::fmt::{Debug, Formatter, Write as FmtWrite};
 use std::io::{stderr, stdin, BufRead, Write};
 use std::mem::{replace, swap};
@@ -85,7 +86,19 @@ fn c() {
 }
 
 fn d() {
-    unimplemented!();
+    let (a, b, x) = read!(usize, usize, usize);
+    let a = a as f64;
+    let b = b as f64;
+    let x = x as f64;
+    let theta = ((b * b * a) / (2.0 * x)).atan();
+
+    if b * ((PI / 2.0) - theta).tan() <= a {
+        println!("{}", theta * 180.0 / PI);
+        return;
+    }
+
+    let theta = ((2.0 * a * a * b - 2.0 * x) / a.powi(3)).atan();
+    println!("{}", theta * 180.0 / PI);
 }
 
 fn e() {
@@ -97,5 +110,5 @@ fn f() {
 }
 
 fn main() {
-    c();
+    d();
 }
