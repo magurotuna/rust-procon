@@ -52,6 +52,50 @@ macro_rules! debugln {
     ($($format:tt)*) => (writeln!(std::io::stderr(), $($format)*).unwrap());
 }
 
-fn main() {
+fn a() {
     unimplemented!();
+}
+
+fn b() {
+    unimplemented!();
+}
+
+fn c() {
+    let n = read!(usize);
+    if n == 2 {
+        println!("1");
+        return;
+    }
+    if n == 3 || n == 4 {
+        println!("2");
+        return;
+    }
+    let mut max_div = 1;
+    for i in 1..((n as f64).sqrt() as usize + 1) {
+        //        println!("{}", i);
+        if n % i == 0 {
+            max_div = i;
+        }
+    }
+    let t = n / max_div;
+
+    //    debugln!("{} {}", max_div, t);
+
+    println!("{}", max_div + t - 2);
+}
+
+fn d() {
+    unimplemented!();
+}
+
+fn e() {
+    unimplemented!();
+}
+
+fn f() {
+    unimplemented!();
+}
+
+fn main() {
+    c();
 }
