@@ -54,11 +54,25 @@ macro_rules! debugln {
 }
 
 fn a() {
-    unimplemented!();
+    let (a, b) = read!(usize, usize);
+    if a <= 9 && b <= 9 {
+        println!("{}", a * b);
+    } else {
+        println!("-1");
+    }
 }
 
 fn b() {
-    unimplemented!();
+    let n = read!(usize);
+    for i in 1..10 {
+        for j in 1..10 {
+            if i * j == n {
+                println!("Yes");
+                return;
+            }
+        }
+    }
+    println!("No");
 }
 
 fn c() {
@@ -110,5 +124,5 @@ fn f() {
 }
 
 fn main() {
-    d();
+    a();
 }
