@@ -52,6 +52,30 @@ macro_rules! debugln {
     ($($format:tt)*) => (writeln!(std::io::stderr(), $($format)*).unwrap());
 }
 
-fn main() {
+fn a() {
     unimplemented!();
+}
+
+fn b() {
+    unimplemented!();
+}
+
+fn c() {
+    unimplemented!();
+}
+
+fn d() {
+    unimplemented!();
+}
+
+fn e() {
+    unimplemented!();
+}
+
+fn f() {
+    unimplemented!();
+}
+
+fn main() {
+    a();
 }
