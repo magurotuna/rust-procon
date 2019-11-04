@@ -53,5 +53,9 @@ macro_rules! debugln {
 }
 
 fn main() {
-    unimplemented!();
+    let (k, x) = read!(i32, i32);
+    let ans = ((x - k + 1)..(x + k))
+        .map(|x| x.to_string())
+        .collect::<Vec<_>>();
+    println!("{}", ans.join(" "));
 }
