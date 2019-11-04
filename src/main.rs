@@ -53,11 +53,57 @@ macro_rules! debugln {
 }
 
 fn a() {
-    unimplemented!();
+    let s = read!(String);
+    let c: Vec<char> = s.chars().collect();
+    let mut prev_c = '*';
+    let mut runlen: Vec<(char, usize)> = vec![];
+    for cc in c {
+        if prev_c == cc {
+            runlen.last_mut().unwrap().1 += 1;
+        } else {
+            runlen.push((cc, 1));
+            prev_c = cc;
+        }
+    }
+    let mut ans = 0;
+    let mut index = 0;
+
+    if runlen[0].0 == '>' {
+        let r = runlen[0];
+        ans += r.1 * (r.1 + 1) / 2;
+        index = 1;
+    }
+
+    while index < runlen.len() {
+        let next = index + 1;
+        let r = runlen[index];
+
+        if next == runlen.len() {
+            ans += r.1 * (r.1 + 1) / 2;
+        } else {
+            let r2 = runlen[next];
+            // rが増加列、r2が減少列
+            if r.1 < r2.1 {
+                ans += r.1 * (r.1 - 1) / 2;
+                ans += r2.1 * (r2.1 + 1) / 2;
+            } else if r.1 >= r2.1 {
+                ans += r.1 * (r.1 + 1) / 2;
+                ans += r2.1 * (r2.1 - 1) / 2;
+            }
+        }
+        index += 2;
+    }
+
+    println!("{}", ans);
 }
 
 fn b() {
-    unimplemented!();
+    let n = read!(usize);
+    let mut lr = vec![];
+    for i in 0..n {
+        let t = read!(usize, usize);
+        lr.push((t.0 - 1, t.1 - 1));
+    }
 }
 
 fn c() {
