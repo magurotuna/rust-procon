@@ -53,5 +53,51 @@ macro_rules! debugln {
 }
 
 fn main() {
-    unimplemented!();
+    let s = read!(String);
+    let t = read!(String);
+    let sc = s.chars().collect::<Vec<_>>();
+    let tc = t.chars().collect::<Vec<_>>();
+
+    let mut alpha = HashMap::new();
+    for i in 0..sc.len() {
+        (*alpha.entry(sc[i]).or_insert(vec![])).push(i);
+    }
+
+    let mut set: HashSet<usize> = HashSet::new();
+    for i in 0..sc.len() {
+        if sc[i] == tc[i] {
+            continue;
+        }
+
+        if set.contains(&i) {
+            // すでに1回、操作を適用済みである場合は、もう不可能
+            continue;
+        }
+
+        // sc[i] -> tc[i] に置換してチェック
+        for &scidx in alpha.get(&sc[i]).unwrap() {
+            // 検証済みインデックスを登録
+            set.insert(scidx);
+            if tc[scidx] != tc[i] {
+                println!("No");
+                return;
+            }
+        }
+
+        // sc中の tc[i] を sc[i] に置換してチェック
+        match alpha.get(&tc[i]) {
+            None => (),
+            Some(arr) => {
+                for &tcidx in arr {
+                    set.insert(tcidx);
+                    if tc[tcidx] != sc[i] {
+                        println!("No");
+                        return;
+                    }
+                }
+            }
+        };
+    }
+
+    println!("Yes");
 }
