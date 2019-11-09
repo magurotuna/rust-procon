@@ -50,4 +50,6 @@ fn test_mod_pow() {
         assert_eq!(mod_pow(x, i, m), t);
         t = t * x % m;
     }
+
+    assert_eq!(mod_pow(10, 30, m), 999657007);
 }
