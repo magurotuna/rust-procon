@@ -53,5 +53,11 @@ macro_rules! debugln {
 }
 
 fn main() {
-    unimplemented!();
+    let n = read!(u64);
+    let x: Vec<u64> = read!(u64; 5);
+
+    // 律速段階となっている箇所だけで決まりそうな気がする
+    let m = x.iter().min().unwrap();
+
+    println!("{}", (n as f64 / *m as f64).ceil() as u64 + 4);
 }
